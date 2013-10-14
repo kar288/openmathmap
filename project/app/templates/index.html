@@ -1,3 +1,5 @@
+{% load dajaxice_templatetags %}
+{% load staticfiles %}
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -5,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="/static/leaflet/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="/static/myCSS.css" />
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css"/>
+    {% dajaxice_js_import %}
+    <script type="text/javascript" src="{% static "/static/dajax/jquery.dajax.core.js" %}"></script>
 <!--    <script type="text/javascript" src="/osm/search.js"></script>-->
     <title> MathMap </title>
   </head>
@@ -31,13 +35,12 @@
 
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <form method="POST" class="navbar-form navbar-right">
+              <div class="navbar-form navbar-right">
                 <div class="form-group">
-                  <input type="text" placeholder="Search" class="msc-search form-control">
+                  <input type="text" placeholder="Search" name="term" class="msc-search form-control">
                 </div>
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">Search</button>
-              </form>
+                <button type="submit" class="btn btn-success" onclick="Dajaxice.app.views.sayhello(my_js_callback);">Search</button>
+              </div>
             </li>
           </ul><!--navbar right -->
         </div>
@@ -45,7 +48,7 @@
     </div><!-- /.navbar -->
     
       <div class="row" style="height:100%">
-        <div class="col-lg-2 left" style="height:100%">
+        <div class="col-lg-2 left">
         <div class="about">
           <p>The MathMap is a project being presently worked on at Jacobs University.</p>
 

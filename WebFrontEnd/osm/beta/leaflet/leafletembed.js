@@ -117,10 +117,10 @@ function buildMenu() {
 }
 
 function searchListen() {
-	$('#mscSearch').bind("enterKey",function(e) {
-		getPosition($.trim($('#mscSearch').val()));
+	$('.msc-search').bind("enterKey",function(e) {
+		getPosition($.trim($('.msc-search').val()));
 	});
-	$('#mscSearch').keyup(function(e){
+	$('.msc-search').keyup(function(e){
 		if(e.keyCode == 13) {
 		  $(this).trigger("enterKey");
 		}

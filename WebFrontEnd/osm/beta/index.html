@@ -1,7 +1,10 @@
+<!DOCTYPE HTML>
 <html>
   <head>
+    <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="/osm/leaflet/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="myCSS.css" />
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css"/>
     <script type="text/javascript" src="../jquery-1.9.1.js"></script>
     <script type="text/javascript" src="leaflet/leaflet.js"></script>
     <script type="text/javascript" src="leaflet/leafletembed.js"></script>
@@ -9,16 +12,49 @@
     <title> MathMap </title>
   </head>
 <body onload="initmap();">
-    <div id="header">
-        <h1> <a href="index.html"> MathMap <a></h1>
-        <div class="menu"> Accessing Math via Interactive Maps </div>
-        <div class="menu"> <a href="about.html">About </a></div>
-        <div class="search"> search: <input type = "text" id="mscSearch" name="search"></div>
-      </div>
-    <div id="container">
-      
-      <div id="left" class="column">
-        <p>The MathMap is a project being presently worked on at Jacobs University. </p>
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">OpenMathMap</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+          <ul class="nav navbar-nav navbar-left">
+            <li >
+              <a href="#">About</a>
+            </li>
+            <li >
+              <a href="#">Browse</a>
+            </li>
+          </ul><!--navbar-left -->
+
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <form class="navbar-form navbar-right">
+                <div class="form-group">
+                  <input type="text" placeholder="Search" class="msc-search form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+              </form>
+            </li>
+          </ul><!--navbar right -->
+        </div>
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
+    
+      <div class="row" style="height:100%">
+        <div class="col-lg-2" style="height:100%">
+        </div>
+        <div class="col-lg-10" style="height:100%">
+          <div id="map">
+            
+          </div>
+        </div>
+       <!--  <p>The MathMap is a project being presently worked on at Jacobs University. </p>
         <p>This project wants to develop
         and deploy novel interfaces that empower interested parties to find their way. We have developed a prototype map generation service based
 on MSC classifications and deployed the maps resulting from ZBMath
@@ -35,12 +71,14 @@ data in OpenStreetMap.</p>
           </div>
           <table class="classes">
           </table>
-        </div>
-      </div>
+        </div> -->
+      </div> <!-- row -->
 
-    </div>
-    <div id="footer">
-    </div>
+      <script type="text/javascript" src="../jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="leaflet/leaflet.js"></script>
+      <script type="text/javascript" src="leaflet/leafletembed.js"></script>
+      <script src="../bootstrap/js/bootstrap.min.js"></script>
+      <script src="../bootstrap/js/bootstrap.file-input.js"></script>
   </body>
 </html>
 

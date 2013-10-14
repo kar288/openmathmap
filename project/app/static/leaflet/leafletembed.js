@@ -82,6 +82,7 @@ function main () {
 	});
 	searchListen();
 	buildMenu();
+
 }
 
 function buildMenu() {
@@ -123,8 +124,10 @@ function buildMenu() {
 
 function searchListen() {
 	$('.msc-search').bind("enterKey",function(e) {
-		getPosition($.trim($('.msc-search').val()));
-		console.log($('.msc-search').val())
+		// getPosition($.trim($('.msc-search').val()));
+		console.log(Dajaxice.app.views.getPosition(Dajax.process,{'term':$.trim($('.msc-search').val())}))
+		// $.trim($('.msc-search').val())
+		// console.log($('.msc-search').val())
 	});
 	$('.msc-search').keyup(function(e){
 		if(e.keyCode == 13) {
@@ -142,3 +145,6 @@ function getPosition(e) {
 	}
 }
 
+function my_js_callback(data){
+    alert(data.message);
+}
