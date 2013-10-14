@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
-from elementtree.ElementTree import parse
+#from elementtree.ElementTree import parse
 import os
 
 from app.models import *
