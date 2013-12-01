@@ -66,7 +66,7 @@ var getMsc = function (data) {
 		console.log(zentralblatt);
 		popup
 		    .setLatLng(latlng)
-		    .setContent(mscJson.name + ': ' + mscJson.description + '<br>Goto: <br> <a href="'+ planetmath + '">  PlanetMath  </a><br> <a href="' + zentralblatt + '">Zentralblatt</a>')
+		    .setContent('<h5>' + mscJson.name + '</h5>' + mscJson.description + '<br><a href="'+ planetmath + '">  PlanetMath  </a><br> <a href="' + zentralblatt + '">Zentralblatt</a>')
 		    .openOn(map);
 	}
 };
