@@ -9,7 +9,7 @@ dajaxice_autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^$', 'app.views.index', name='index'),
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+	url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
