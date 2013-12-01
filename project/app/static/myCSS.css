@@ -28,11 +28,26 @@ html {
 body {
   padding-top: 50px;
   height: 100%;
-  padding-left: 10px
 }
 
-.left {
-	padding-top: 10px
+.row.content {
+	height:100%;
+	margin: 0px;
+}
+
+.col-lg-2.left {
+	padding: 10px;
+}
+
+.about {
+	font-size: 12px;
+	/*padding: 10px 0px 10px 35px;*/
+	text-align: justify;
+}
+
+.col-lg-10.map-content {
+	height:100%;
+	padding: 0px;	
 }
 
 #map {
