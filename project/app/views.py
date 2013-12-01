@@ -7,6 +7,10 @@ from django.utils import simplejson
 # from dajax.core import Dajax
 import os
 
+import json
+from django.template import loader, RequestContext
+from django.http import HttpResponse, Http404
+
 from app.models import *
 
 def index(request):
@@ -23,8 +27,7 @@ def index(request):
 	# 			next.save()
 	# 			msc.second.add(next)
 	# 			msc.save()
-	mscs = MSC.objects.filter(main = True)
-	return render(request, "index.html", {'mscs': mscs})
+	return render(request, "index.html", {})
 	
 # @dajaxice_register
 def getPosition(request, term):
@@ -33,3 +36,14 @@ def getPosition(request, term):
 	# dajax = Dajax()
 	# dajax.assign('.msc-search','value',str(result))
 	# return dajax.json()
+
+def getMscs(request, type):
+	mscs = MSC.objects.filter(main = True);
+
+	context = {'mscs': mscs};
+
+	template = loader.get_template('components/menu.html')
+	reqContext = RequestContext(request, context)
+	response_data = template.render(reqContext);
+
+	return HttpResponse(json.dumps({'html': response_data}), content_type="application/json");

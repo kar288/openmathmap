@@ -1,0 +1,12 @@
+<div class="left-content mscs">
+{% for msc in mscs.all %}
+	<div class="first">
+		{{msc.number}} - {{msc.name}}
+		<!-- {% for second in msc.second.all %}
+			<div class="second">
+				{{second.number}} - {{second.name}}
+			</div>
+		{% endfor %} -->
+	</div>
+{% endfor %}
+</div>

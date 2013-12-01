@@ -63,7 +63,6 @@ var getMsc = function (data) {
 		var name = mscJson.name.substring(3);
 		var planetmath = "http://planetmath.org/msc_browser/"+ name;
 		var zentralblatt = "http://www.zentralblatt-math.org/msc/en/search/?pa=" + name.replace("-XX","");
-		console.log(zentralblatt);
 		popup
 		    .setLatLng(latlng)
 		    .setContent('<h5>' + mscJson.name + '</h5>' + mscJson.description + '<br><a href="'+ planetmath + '">PlanetMath</a><br> <a href="' + zentralblatt + '">Zentralblatt</a>')
@@ -76,49 +75,14 @@ var getMsc = function (data) {
 $(document).ready(main);
 
 function main () {
-	$('.browser').bind('click', function () {
-		$('.Major').toggle();
-		$('.Second').hide();
-	});
+	$('.browse').click(buildMenu);
 	searchListen();
-	buildMenu();
 
 }
 
 function buildMenu() {
-	var bla;
-	console.log("buildmenue");
-	$.ajax({
-		type: 'GET',
-		url: 'msc-medium.xml',
-		dataType: 'xml',
-		beforeSend: function (xhr) {
-			//console.log("before");
-		}
-	}).done(function (data) {
-		bla = data;
-		console.log(data);
-		var text = '';
-		$(data).find("Major").each(function() {
-			var name = $(this).find("name").first().contents().text(),
-				number = $(this).find("number").first().contents().text();
-			text += '<tr id = "'+ number +'" class="Major"><td>' + name + '</td><td>' + number + '</td><tr>';
-
-			$(this).find("Second").each(function() {
-				var sname = $(this).find("name").first().contents().text(),
-				snumber = $(this).find("number").first().contents().text();
-				text += '<tr id = '+ snumber +' class="Second '+ number +'"><td>.....'+ sname +'</td><td>'+ snumber +'</td></tr>';
-
-			});
-		});
-
-		$('.classes').append(text);
-
-		$('.Major').bind('click', function () {
-			console.log($('.' + $(this).attr('id')));
-			$('.' + $(this).attr('id')).toggle();
-			console.log($(this).attr('id'));
-		});
+	$.getJSON('/get/first/', function(data) {
+		$('.left-content').replaceWith(data.html);
 	});
 }
 

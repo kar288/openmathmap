@@ -9,6 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
 	url(r'^$', 'app.views.index', name='index'),
+	url(r'^get/(?P<type>[a-zA-Z0-9]+)/$', 'app.views.getMscs', name='getMscs'),
 	# url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
