@@ -35,24 +35,24 @@ function initmap() {
     map.setView(new L.LatLng(0.5, 0.5), 10);
     map.addLayer(osm);
     var x, y;
-  //   map.on('click', function (e) {
-  //       x = e.latlng.lat;
-  //       y = e.latlng.lng;
-		// z = map.getZoom();
-  //       latlng = e.latlng;
-  //       $.ajax({
-	 //   	    url: "http://map.mathweb.org:8080/MathService/mscquery/?lat=" + x + "&long=" + y + "&zoom=" + z,
-		//     headers: {
-		// 	jsonp: 'application/javascript'
-		//     },
-	 //            accepts: 'application/javascript',
-	 //            dataType: 'jsonp',
-	 //            contentType: 'application/javascript',
-	 //            crossDomain: true,
-	 //            type: 'GET',
-		//     jsonpCallback: 'getMsc'
-		// });
-  //   });
+    map.on('click', function (e) {
+        x = e.latlng.lat;
+        y = e.latlng.lng;
+		z = map.getZoom();
+        latlng = e.latlng;
+        $.ajax({
+	   	    url: "http://map.mathweb.org:8080/MathService/mscquery/?lat=" + x + "&long=" + y + "&zoom=" + z,
+		    headers: {
+			jsonp: 'application/javascript'
+		    },
+	            accepts: 'application/javascript',
+	            dataType: 'jsonp',
+	            contentType: 'application/javascript',
+	            crossDomain: true,
+	            type: 'GET',
+		    jsonpCallback: 'getMsc'
+		});
+    });
 
 }
 
