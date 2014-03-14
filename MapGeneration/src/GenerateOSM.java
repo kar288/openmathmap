@@ -141,7 +141,7 @@ public class GenerateOSM {
         }
 
         midLevelMSCs = new ArrayList<MSC>();
-
+/*
         File dataDir = plotData.getParentFile();
         for (File file: dataDir.listFiles()) {
             if (file.isDirectory() && file.getName().startsWith("MSC")) {
@@ -191,7 +191,7 @@ public class GenerateOSM {
                     str2msc.put(msc.getName(), msc);
                 }
             }
-        }
+        }*/
         computeMapData();
     }
 
@@ -543,17 +543,18 @@ public class GenerateOSM {
                     osmFile.endSpecialNode();
                 }
 
-                osmFile.addWay(cityId);
-
-                for (idx = 0; idx < cityCoords.size(); ++idx) {
-                    osmFile.addSpecialNodeReference(cityId + "_" + idx++);
-                }
-
-                osmFile.addSpecialNodeReference(cityId + "_0");
-
-                osmFile.addTag("name", cityId);
-                osmFile.addTag("MSCCity", "0");
-                osmFile.endWay();
+//                osmFile.addWay(cityId);
+//
+//                for (idx = 0; idx < cityCoords.size(); ++idx) {
+//                    osmFile.addSpecialNodeReference(cityId + "_" + idx++);
+//                }
+//
+//                osmFile.addSpecialNodeReference(cityId + "_0");
+//
+//                osmFile.addTag("name", cityId);
+//                osmFile.addTag("natural", "city");
+//                osmFile.addTag("MSCCity", "0");
+//                osmFile.endWay();
             }
             line = br.readLine();
         }
@@ -676,6 +677,7 @@ public class GenerateOSM {
                 /** start a new way. action is also a required attribute here */
 
                 osmFile.addWay("coast" + coastCounter);
+                System.out.println(coastCounter);
                 /** process the next batch of nodes */
                 for (int i = currentCoastLength; i < Math.min(currentCoastLength + 2000, currCoast.size()); ++i) {
                     osmFile.addGridNodeReference(currCoast.get(i).getX(), currCoast.get(i).getY());
@@ -752,6 +754,7 @@ public class GenerateOSM {
 
                     osmFile.addTag("name", msc.getName() + "_" + counter);
                     osmFile.addTag("MSCBorder", String.valueOf(msc.getLevel()));
+                    osmFile.addTag("natural", "MSCBorder");
                     if (msc.getLevel() == 0) {
                         osmFile.addTag("MSCColor",    String.valueOf(coloring[topMSC2int.get(msc)]));
                         int mscId = Integer.parseInt(msc.getName().substring(3, 5));
@@ -780,9 +783,10 @@ public class GenerateOSM {
                 MSC msc2 = isMidLevelGrid ? getParentMSC(aNearestMSC[j+1]) : aNearestMSC[j+1];
 
                 if (msc1 != null && msc2 != null && msc1 != msc2) {
+
+                    System.out.println(topMSC2int.get(msc2));
                     int idx1 = topMSC2int.get(msc1);
                     int idx2 = topMSC2int.get(msc2);
-
                     if (graph[idx1][idx2] == 0) {
                         degrees[idx1]++;
                         degrees[idx2]++;
@@ -880,6 +884,7 @@ public class GenerateOSM {
         for (MSC msc: topLevelMSCs) {
             osmFile.addSpecialNode(msc.getX() / resolution, msc.getY() / resolution, msc.getName());
             osmFile.addTag("name", msc.getName());
+            osmFile.addTag("natural", "capital");
             osmFile.addTag("description", msc.getDescription());
             osmFile.addTag("MSCInfo", "0");
             osmFile.endSpecialNode();
@@ -889,6 +894,7 @@ public class GenerateOSM {
         for (MSC msc: midLevelMSCs) {
             osmFile.addSpecialNode(msc.getX() / resolution, msc.getY() / resolution, msc.getName());
             osmFile.addTag("name", msc.getName());
+            osmFile.addTag("natural", "capital");
             osmFile.addTag("description", msc.getDescription());
             osmFile.addTag("MSCInfo", "1");
             osmFile.endSpecialNode();
@@ -981,26 +987,36 @@ public class GenerateOSM {
 
     //     file.close();
     // }
-
     public static void main(String[] args) throws IOException {
-        File dataDir = new File("/home/jdoerrie/Desktop/ZBMath/");
-        if (dataDir.listFiles() != null) {
-            for (File file: dataDir.listFiles()) {
-                if (file.isDirectory() && file.getName().startsWith("cuml1986")) {
-                    File plotData = new File(file + "/PlotData.txt");
-                    if (plotData.exists()) {
-                        File cityData = new File(file + "/cities.csv");
-                        cityData = null;
-                        GenerateOSM osm = new GenerateOSM(plotData, cityData,
-                                new File("project/myData/Desc_msc2010-final.txt"), 1024);
-                        // System.out.println(osm.getMSC(0.5, 0.5));
-                        osm.exportToOSM(new File(file + "/" + file.getName() + "Map.osm"));
+        File dataDir = new File("/home/cacevedo/Documents/openmathmap/MapData/ZBMath/zbl_cc");
+        File plotData = new File(dataDir + "/MergedPlotData.txt");
+        System.out.println("4444");
+        if (plotData.exists()) {
+          File cityData = new File(dataDir + "/cities.csv");
+//          cityData = null;
+          GenerateOSM osm = new GenerateOSM(plotData, cityData,
+                  new File("/home/cacevedo/Documents/openmathmap/MapData/Desc_msc2010-final.txt"), 1024);
+          System.out.println("jkdlajkl");
+          osm.exportToOSM(new File(dataDir + "/" + dataDir.getName() + "Map1.osm"));
 
-//                        osm.dumpLabels(new File(file + "/" + file.getName() + "Labels.osm"));
-//                        osm.exportMSCGrid(new File(file + "/MSCGrid1.csv"), 1);
-                    }
-                }
-            }
-        }
+      }
+//        if (dataDir.listFiles() != null) {
+//            for (File file: dataDir.listFiles()) {
+//                if (file.isDirectory() && file.getName().startsWith("cuml1986")) {
+//                    File plotData = new File(file + "/PlotData.txt");
+//                    if (plotData.exists()) {
+//                        File cityData = new File(file + "/cities.csv");
+//                        cityData = null;
+//                        GenerateOSM osm = new GenerateOSM(plotData, cityData,
+//                                new File("project/myData/Desc_msc2010-final.txt"), 1024);
+//                        // System.out.println(osm.getMSC(0.5, 0.5));
+//                        osm.exportToOSM(new File(file + "/" + file.getName() + "Map.osm"));
+//
+////                        osm.dumpLabels(new File(file + "/" + file.getName() + "Labels.osm"));
+////                        osm.exportMSCGrid(new File(file + "/MSCGrid1.csv"), 1);
+//                    }
+//                }
+//            }
+//        }
     }
 }

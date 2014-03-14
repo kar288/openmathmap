@@ -107,7 +107,7 @@ public class OSMFile {
      * @param name name of the way
      */
     public void addWay(String name) {
-        pw.printf("<way id='%d' action='modify' visible='true' version='1'>\n", name.hashCode());
+        pw.printf("<way id='%d' visible='true' version='1'>\n", name.hashCode());
     }
 
     /**
