@@ -32,10 +32,13 @@
           <ul class="nav navbar-nav navbar-right">
             <li>
               <div class="navbar-form navbar-right">
-                <div class="form-group">
-                  <input type="text" placeholder="Search" name="term" class="msc-search form-control">
-                </div>
-                <button type="submit" class="btn btn-success btn-search" onclick="Dajaxice.app.views.sayhello(my_js_callback);"><span class="glyphicon glyphicon-search"></span></button>
+                <form method="GET" class="search-form">
+                  <div class="form-group">
+                    <input type="text" placeholder="Search" name="term" class="msc-search form-control">
+                  </div>
+                  {%csrf_token%}
+                  <button type="submit" class="btn btn-success btn-search" onclick="search"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
               </div>
             </li>
           </ul><!--navbar right -->

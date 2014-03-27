@@ -1,7 +1,31 @@
 from django.db import models
+from django.contrib.gis.db import models
+
+FIRST = 1;
+SECOND = 2;
+THIRD = 3;
+LEVEL = (
+	(FIRST, 'Main'),
+	(SECOND, 'Second level'),
+	(THIRD, 'Third Level'),
+)
+
 
 class MSC(models.Model):
-	main = models.BooleanField(default= True)
-	name = models.CharField(max_length = 20)
-	number = models.CharField(max_length = 100)
-	second = models.ManyToManyField('self', related_name='msc_second', symmetrical=False)
+	main = models.IntegerField(choices = LEVEL, default = FIRST)
+	name = models.CharField(max_length = 200)
+	number = models.CharField(max_length = 10)
+	child = models.ManyToManyField('self', related_name='parent', symmetrical=True)
+
+class MSCPolygon(models.Model):
+	osm_id = models.BigIntegerField(primary_key=True)
+	way = models.GeometryField(blank=True,srid=900913) # This field type is a guess.
+	name = models.CharField(max_length = 100);
+	objects = models.GeoManager()
+
+	def __unicode__(self):
+		return str(self.name)
+
+	class Meta:
+		managed = False 
+		db_table = "planet_osm_polygon"

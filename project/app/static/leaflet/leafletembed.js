@@ -21,6 +21,9 @@ var map;
 var ajaxRequest;
 var plotlist;
 var plotlayers=[];
+var markers = [];
+var markerLayer;
+var mathSearchUrl = 'http://search.mathweb.org/zbl/php/tema_proxy.php'
 
 function initmap() {
     // set up the map
@@ -36,47 +39,131 @@ function initmap() {
     map.addLayer(osm);
     var x, y;
     map.on('click', function (e) {
-        x = e.latlng.lat;
-        y = e.latlng.lng;
+    	a = e.latlng
+    	pos = L.CRS.EPSG900913.project(e.latlng);
 		z = map.getZoom();
-        latlng = e.latlng;
-        $.ajax({
-	   	    url: "http://map.mathweb.org:8080/MathService/mscquery/?lat=" + x + "&long=" + y + "&zoom=" + z,
-		    headers: {
-			jsonp: 'application/javascript'
-		    },
-	            accepts: 'application/javascript',
-	            dataType: 'jsonp',
-	            contentType: 'application/javascript',
-	            crossDomain: true,
-	            type: 'GET',
-		    jsonpCallback: 'getMsc'
-		});
+    	$.getJSON("/getMSC/" + pos.x + "/" + pos.y + "/" + z, function(data) {
+    		if (data.water) {
+    			return;
+    		}
+    		var popup = L.popup();
+    		popup
+			    .setLatLng(e.latlng)
+			    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a href="' + data.zentralblatt + '">Zentralblatt</a>')
+			    .openOn(map);
+    	});
     });
 
 }
-
-var getMsc = function (data) {
-    var popup = L.popup();
-	mscJson = data;
-	if (data.name != 'null') {
-		var name = mscJson.name.substring(3);
-		var planetmath = "http://planetmath.org/msc_browser/"+ name;
-		var zentralblatt = "http://www.zentralblatt-math.org/msc/en/search/?pa=" + name.replace("-XX","");
-		popup
-		    .setLatLng(latlng)
-		    .setContent('<h5>' + mscJson.name + '</h5>' + mscJson.description + '<br><a href="'+ planetmath + '">PlanetMath</a><br> <a href="' + zentralblatt + '">Zentralblatt</a>')
-		    .openOn(map);
-	}
-};
-
 
 
 $(document).ready(main);
 
 function main () {
 	$('.browse').click(buildMenu);
-	searchListen();
+	$('.search-form').submit(function (event) {
+		event.preventDefault()
+		var term = $('.msc-search').val();
+		if (!term) {
+			return;
+		}
+		mathsearch(term);
+		z = map.getZoom()
+		// $.getJSON("/search/" + term  + "/" + z + "/1", function(data) {
+		// 	markers = []
+  //   		for(var key in data) {
+  //   			entry = data[key]
+  //   			var marker = L.marker();
+  //   			marker
+  //   				.setLatLng(L.latLng(entry.position[1], entry.position[0]))
+  //   				.addTo(map)
+  //   			marker._icon.title = entry.name
+  //   			markers.push(marker)
+  //   		}
+  //   		if (markerLayer) {
+	 //    		markerLayer.clearLayers()
+	 //    	}
+  //   		markerLayer = L.layerGroup(markers)
+  //   		markerLayer.addTo(map)
+  //   	});
+	})
+
+}
+
+function get_content_mathml(latexml_response) {
+	var hasContent = /<annotation-xml[^>]*\"MWS\-Query\"[^>]*>([\s\S]*)<\/annotation-xml>/;
+	var m = hasContent.exec(latexml_response);
+	var content = null;
+	if (m!= null) {
+		content = m[1];
+	}
+
+	return content;
+}; 
+
+var r;
+
+function getMSCFromArticle(title, numbers, markers, z) {
+	$.getJSON("/search/" + numbers  + "/" + z + "/2", function(data) {
+		for(var key in data) {
+			entry = data[key]
+			var marker = L.marker();
+			marker
+				.setLatLng(L.latLng(entry.position[1], entry.position[0]))
+				.addTo(map)
+			marker._icon.title = title
+			markers.push(marker)
+		}
+	});
+}
+
+function mathsearch(term) {
+	var result;
+	$.post("http://search.mathweb.org/zbl/php/latexml_proxy.php", {
+		profile: 'mwsq',
+		tex: term,
+	}, function (data) {
+		result = data.result
+	}).fail(function() {
+	    error_callback("Unable to query server. ");
+	});
+	content = get_content_mathml(result);
+	var data = {
+		"text": term,
+		"math": content,
+		"from": 0,
+		"size": 20,
+	}
+	var results = {};
+	$.ajax({
+	   type: 'GET',
+	   url: "http://search.mathweb.org/zbl/php/tema_proxy.php",
+	   data: data,
+	}).done(function(data) {
+	    for (var key in data.hits) {
+	    	xhtml = $(jQuery.parseXML(data.hits[key].xhtml))
+	    	classes = xhtml.find(".class").text().split(" ")
+	    	for (var i in classes) {
+	    		classes[i] = classes[i].slice(0,3)
+	    	}
+	    	number = classes.join(" ")
+	    	title = xhtml.find(".review > .title").text()
+	    	results[title] = number
+	    }
+		for (var title in results) {
+			getMSCFromArticle(title, results[title], markers, z)
+		}
+		if (markerLayer) {
+    		markerLayer.clearLayers()
+    	}
+		markerLayer = L.layerGroup(markers)
+		markerLayer.addTo(map)
+
+	}).fail(function(){
+		console.log("BAD"); 
+	}); 
+
+
 
 }
 
@@ -86,18 +173,8 @@ function buildMenu() {
 	});
 }
 
-function searchListen() {
-	$('.msc-search').bind("enterKey",function(e) {
-		// getPosition($.trim($('.msc-search').val()));
-		console.log(Dajaxice.app.views.getPosition(Dajax.process,{'term':$.trim($('.msc-search').val())}))
-		// $.trim($('.msc-search').val())
-		// console.log($('.msc-search').val())
-	});
-	$('.msc-search').keyup(function(e){
-		if(e.keyCode == 13) {
-		  $(this).trigger("enterKey");
-		}
-	});
+function search() {
+	console.log('bla')
 }
 
 function getPosition(e) {
@@ -107,8 +184,4 @@ function getPosition(e) {
 	} else {
 		map.removeLayer(marker);
 	}
-}
-
-function my_js_callback(data){
-    alert(data.message);
 }
