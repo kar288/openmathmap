@@ -46,6 +46,8 @@ function main () {
 	$('.search-by-formula').click(function () {
 		updateSearch("f: ");
 	})
+
+	$('.msc-search').val('f: P = NP')
 }
 
 //Initialize everything related to the map.
