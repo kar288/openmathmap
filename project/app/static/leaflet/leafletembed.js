@@ -323,6 +323,7 @@ function convert(term) {
 
 // Given a term find all articles that contain it in abstract, using API
 function mathsearch(term) {
+	console.log('bla')
 	markers = []
 	map.spin(true);
 	convert(term);
