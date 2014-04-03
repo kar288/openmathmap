@@ -49,7 +49,7 @@ function main () {
 
 	$('.msc-search').val('f: P = NP')
 }
-
+var b
 //Initialize everything related to the map.
 function initmap() {
     // Create map
@@ -99,7 +99,8 @@ function initmap() {
 
 
 	//filter button
-	var btn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-globe"></span></div>' , position: 'topleft', title: 'Select Markers'}]);
+	var btn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topleft', title: 'Select Markers'}]);
+	b = btn
 	btn.on('clicked', filterMarkers);
 	map.addControl(btn);
 }
