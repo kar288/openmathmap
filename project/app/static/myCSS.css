@@ -60,3 +60,8 @@ body {
 .btn-search {
 	height: 34px;
 }
+
+.map-button {
+	font-size: 15px;
+	padding: 2px 2px;
+}

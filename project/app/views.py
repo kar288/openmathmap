@@ -15,6 +15,8 @@ from django.contrib.gis.geos import *
 import string
 import re
 
+from django.db import transaction
+
 
 def index(request):
 	return render(request, "index.html", {})
@@ -68,30 +70,41 @@ def getPlanetmath(number):
 def getZentralblatt(number):
 	return "http://www.zentralblatt-math.org/msc/en/search/?pa=" + string.replace(number, "-XX","");
 
+def get_search (request):
+	articles = json.loads(request.GET['c'])
+	classes = set()
+	for article in articles:
+		for c in re.split(" ", article['number']):
+			classes.add(c)
+
+	# print classes
+	return HttpResponse(json.dumps({'centroids': 'good'}), content_type="application/json");
+
+@transaction.atomic
 def search(request, term, z, name = 1):
 	name = int(float(name))
 	mscs = MSC.objects.none()
-	print 'start', name, term
-	for word in re.split("[, ;]", term):
-		print word
-		mscs |= MSC.objects.filter(number__icontains = word)
-		if name == 1:
-			# print 'search by name',  MSC.objects.filter(name__icontains = word)
-			mscs |= MSC.objects.filter(name__icontains = word)
+	print 'start', name, term, 'a', term[-1], 'a'
 
-	print mscs
+
+	for word in re.split("[, ;]", term.strip()):
+		mscs |= MSC.objects.filter(number__icontains = word).exclude(main = 3)
+		if name == 1:
+			mscs |= MSC.objects.filter(name__icontains = word).exclude(main = 3)
+
+	print len(mscs), mscs
 	centroids = {}
 
+	a = 0
 	for msc in mscs:
 		data = {}
 
-		# if float(z) <= 12 and not msc.main == 1:
-		# 	continue;
-		# elif float(z) > 12 and not msc.main == 2:
-		# 	continue;
+		if float(z) <= 12 and not msc.main == 1:
+			continue;
+		elif float(z) > 12 and not msc.main == 2:
+			continue;
 
 		try:
-			# print msc.number
 			polygon = MSCPolygon.objects.filter(name__contains = msc.number)
 			polygon = polygon[0]
 			
@@ -106,5 +119,6 @@ def search(request, term, z, name = 1):
 			centroids[msc.number] = data;
 		except:
 			print 'bad', msc.number
+
 
 	return HttpResponse(json.dumps(centroids), content_type="application/json");

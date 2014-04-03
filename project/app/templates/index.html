@@ -4,11 +4,12 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="/static/leaflet/leaflet.css" />
-    <link rel="stylesheet" type="text/css" href="/static/myCSS.css" />
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/services/Leaflet.draw/dist/leaflet.draw.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/myCSS.css" />
     <title> MathMap </title>
   </head>
-<body onload="initmap();">
+<body>
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -29,7 +30,9 @@
             </li>
           </ul><!--navbar-left -->
 
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right nav-pills">
+            <li class="search-by-class" data-toggle="tooltip" data-placement="bottom" title="Search by class"><a href="#"><span class="glyphicon glyphicon-globe"></span></a></li>
+            <li class="search-by-formula" data-toggle="tooltip" data-placement="bottom" title="Search by formula"><a href="#"><span class="glyphicon glyphicon-asterisk"></span></a></li>
             <li>
               <div class="navbar-form navbar-right">
                 <form method="GET" class="search-form">
@@ -66,6 +69,14 @@
       <script type="text/javascript" src="/static/leaflet/leafletembed.js"></script>
       <script src="/static/bootstrap/js/bootstrap.file-input.js"></script>
       <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/static/services/oms.min.js"></script>
+      <script type="text/javascript" src="/static/services/spin.min.js"></script>
+      <script type="text/javascript" src="/static/services/leaflet.spin.js"></script>
+      <script type="text/javascript" src="/static/services/Leaflet.draw/dist/leaflet.draw.js"></script>
+      <script type="text/javascript" src="/static/services/FunctionButton.js"></script>
+      <script type="text/javascript" src="/static/services/Leaflet.Search.js"></script>
+
+
   </body>
 </html>
 
