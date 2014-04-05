@@ -31,7 +31,7 @@ var prefix = ""
 
 $(document).ready(main);
 
-
+var rainbow 
 function main () {
 	initmap()
 
@@ -49,6 +49,9 @@ function main () {
 	})
 
 	$('.msc-search').val('f: P = NP')
+	rainbow = new Rainbow();
+
+	
 }
 var b
 //Initialize everything related to the map.
@@ -109,9 +112,47 @@ function initmap() {
 
 	//filter button
 	var btn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topleft', title: 'Select Markers'}]);
-	b = btn
 	btn.on('clicked', filterMarkers);
 	map.addControl(btn);
+
+
+	//gradient button
+	var gradientBtn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-arrow-up"></span></div>' , position: 'topright', title: 'Gradient'}]);
+
+	gradientBtn.on('clicked', gradient);
+	map.addControl(gradientBtn);
+}
+
+function gradient() {
+	map.spin(true)
+	$.getJSON("/getWay/,/1/", function(data) {
+	    for (var i in data) {
+	   		color = ""
+	   		num = parseInt(i.slice(0,2))
+
+	   		if (num < 16) {	   			
+				color = "#FF0" + num.toString(16) + "00"
+	   		} else if (num > 64) {
+				color = "#" + (128-num).toString(16) + "FF00"
+			} else {
+				color = "#FF" + num.toString(16) + "00"
+			}
+			l = JSON.parse(data[i].way).coordinates[0]
+			for (var i in l) {
+			   l[i][1] += l[i][0]
+			   l[i][0] = l[i][1] - l[i][0]
+			   l[i][1] -= l[i][0]
+			}
+			console.log(rainbow.colorAt(num))
+			polygon = L.polygon(l)
+			polygon.setStyle({color: "#" + rainbow.colourAt(num)})
+			polygon.addTo(map)
+		}
+
+		map.spin(false)
+	}, function(data) {
+		map.spin(false)
+	});
 }
 
 // Given a change to the markers rebuild the layer that contains them

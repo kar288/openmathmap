@@ -77,22 +77,18 @@ def get_search (request):
 		for c in re.split(" ", article['number']):
 			classes.add(c)
 
-	# print classes
 	return HttpResponse(json.dumps({'centroids': 'good'}), content_type="application/json");
 
 @transaction.atomic
 def search(request, term, z, name = 1):
 	name = int(float(name))
 	mscs = MSC.objects.none()
-	print 'start', name, term, 'a', term[-1], 'a'
-
 
 	for word in re.split("[, ;]", term.strip()):
 		mscs |= MSC.objects.filter(number__icontains = word).exclude(main = 3)
 		if name == 1:
 			mscs |= MSC.objects.filter(name__icontains = word).exclude(main = 3)
 
-	print len(mscs), mscs
 	centroids = {}
 
 	a = 0
@@ -122,3 +118,40 @@ def search(request, term, z, name = 1):
 
 
 	return HttpResponse(json.dumps(centroids), content_type="application/json");
+
+def getWay(request, term, z):
+	mscs = MSC.objects.none()
+	print term
+
+	for word in re.split("[, ;]", term.strip()):
+		mscs |= MSC.objects.filter(number__icontains = word).exclude(main = 3)
+		mscs |= MSC.objects.filter(name__icontains = word).exclude(main = 3)
+
+	ways = {}
+
+	for msc in mscs:
+		data = {}
+
+		if float(z) <= 12 and not msc.main == 1:
+			continue;
+		elif float(z) > 12 and not msc.main == 2:
+			continue;
+
+		try:
+			polygon = MSCPolygon.objects.filter(name__contains = msc.number)
+			polygon = polygon[0]
+			
+			way = polygon.way
+			way.transform(4326)
+
+			data['way'] = way.json
+			data['number'] = 'MSC' + msc.number
+			data['name'] = msc.name
+			data['planetmath'] = getPlanetmath(msc.number)
+			data['zentralblatt'] = getZentralblatt(msc.number)
+			ways[msc.number] = data;
+		except:
+			print 'bad', msc.number
+
+
+	return HttpResponse(json.dumps(ways), content_type="application/json");

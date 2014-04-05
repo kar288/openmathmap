@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	url(r'^getMSC/(?P<x>[0-9_@\+\-\.]+)/(?P<y>[0-9_@\+\-\.]+)/(?P<z>[0-9_@\+\-\.]+)$', 'app.views.getMSC', name='getMSC'),
 	url(r'^search/(?P<term>[\w|\W]+)/(?P<z>[0-9_@\+\-\.]+)/(?P<name>[\d]+)?$', 'app.views.search', name='search'),
 	url(r'^search$', 'app.views.get_search', name='get_search'),
+	url(r'^getWay/(?P<term>[\w|\W]+)/(?P<z>[0-9_@\+\-\.]+)/$', 'app.views.getWay', name='getWay'),
 	url(r'^intersection$', 'app.views.get_search', name='get_search'),
 )
 
