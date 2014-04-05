@@ -31,6 +31,7 @@ var prefix = ""
 
 $(document).ready(main);
 
+
 function main () {
 	initmap()
 
@@ -88,6 +89,10 @@ function initmap() {
 	        featureGroup: drawnItems
 	    }
 	});
+
+	L.drawLocal.draw.toolbar.buttons.circle = 'Select markers.';
+
+	L.drawLocal.draw.handlers.circle.tooltip.start += "<br> Select the markers you want to keep.";
 	map.addControl(drawControl);
 
 	map.on('draw:created', function (e) {
@@ -95,6 +100,10 @@ function initmap() {
 			layer = e.layer;
 
 		drawnItems.addLayer(layer);
+
+		if (markers.length) {
+			filterMarkers(false)
+		}
 	});
 
 
@@ -117,7 +126,10 @@ function rebuildMarkerLayer() {
 
 // For each marker check if it is inside of a user created polygon
 // If it is not inside of any then remove it.
-function filterMarkers() {
+function filterMarkers(removeMode) {
+	if (typeof removeMode == 'undefined') {
+		removeMode = true
+	} 
 	var polygons = drawnItems._layers
     var ms = markerLayer._layers
     if ($.isEmptyObject(polygons)) {
@@ -142,14 +154,24 @@ function filterMarkers() {
 
 	    //remove marker
 	    if (check == 0) {
-	    	markers = jQuery.grep(markers, function(value) {
-			  return value != ms[i];
-			});
+	    	if (removeMode) {
+		    	markers = jQuery.grep(markers, function(value) {
+				  return value != ms[i];
+				});
+		    } else {
+		    	ms[i].setOpacity(0.5)
+		    	k = oms.markers.indexOf(ms[i])
+		    	oms.markers[k].setOpacity(0.5)
+		    }
 	    }
     }
 
     //rebuild marker layer
 	rebuildMarkerLayer()
+
+	if (removeMode) {
+		drawnItems.clearLayers()
+	}
 }
 
 
@@ -326,7 +348,6 @@ function convert(term) {
 
 // Given a term find all articles that contain it in abstract, using API
 function mathsearch(term) {
-	console.log('bla')
 	markers = []
 	map.spin(true);
 	convert(term);
