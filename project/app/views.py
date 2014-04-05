@@ -79,7 +79,6 @@ def get_search (request):
 
 	return HttpResponse(json.dumps({'centroids': 'good'}), content_type="application/json");
 
-@transaction.atomic
 def search(request, term, z, name = 1):
 	name = int(float(name))
 	mscs = MSC.objects.none()
