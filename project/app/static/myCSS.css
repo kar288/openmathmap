@@ -26,7 +26,7 @@ html {
 }
 
 body {
-  padding-top: 50px;
+  /*padding-top: 50px;*/
   height: 100%;
 }
 
@@ -59,9 +59,79 @@ body {
 
 .btn-search {
 	height: 34px;
+	width: 100%;
 }
 
 .map-button {
 	font-size: 15px;
 	padding: 2px 2px;
+}
+
+.authorPopup{
+	min-width: 150px;
+}
+
+.search-form{
+	width: 300px;
+}
+
+.small-navigation {
+	margin: 0 -15px;
+}
+
+.no-padding {
+	padding: 0px;
+}
+
+.leaflet-control .row {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.tip {
+	background: white;
+	padding: 10px 5px;
+	margin-top: -15px;
+}
+
+.info {
+	width: 300px;
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.info.tip {
+	font-size: 12px
+}
+
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+.legend-i {
+  clear: both;
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+.legend-label {
+  line-height: 18px;
+}
+
+.selected {
+	color: #999;
+}
+
+.not-selected {
+	color: #000;
+}
+
+.search-selection {
+	font-size: 10px;
+	padding: 9px 8px;
 }

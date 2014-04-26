@@ -51,3 +51,8 @@ docs/_build/
 
 #java
 *.class
+
+#data:
+*.txt
+
+zbl

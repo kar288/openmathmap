@@ -21,7 +21,11 @@
     <title> MathMap </title>
   </head>
 <body>
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+<div class="row content">
+  <div class="col-lg-3">
+  <h1> OpenMathMap </h1>
+  <hr>
+  <!--  <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -30,7 +34,7 @@
           <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">OpenMathMap</a>
-        </div> <!-- navbar-header -->
+        </div> 
         <div class="navbar-collapse collapse" style="height: 1px;">
           <ul class="nav navbar-nav navbar-left">
             <li >
@@ -39,8 +43,7 @@
             <li >
               <a><div class="browse">Browse</div></a>
             </li>
-          </ul><!--navbar-left -->
-
+          </ul>
           <ul class="nav navbar-nav navbar-right nav-pills">
             <li class="search-by-class" data-toggle="tooltip" data-placement="bottom" title="Search by class"><a href="#"><span class="glyphicon glyphicon-globe"></span></a></li>
             <li class="search-by-formula" data-toggle="tooltip" data-placement="bottom" title="Search by formula"><a href="#"><span class="glyphicon glyphicon-asterisk"></span></a></li>
@@ -55,26 +58,29 @@
                 </form>
               </div>
             </li>
-          </ul><!--navbar right -->
+          </ul> 
         </div>
-      </div><!-- /.container -->
-    </div><!-- /.navbar -->
-    
-      <div class="row content">
-        <div class="left col-lg-3">
+      </div>
+    </div> -->
+    <div class="left">
           <div class="about left-content">
             <p>The MathMap is a project being presently worked on at Jacobs University.</p>
 
             <p>This project wants to develop and deploy novel interfaces that empower interested parties to find their way. We have developed a prototype map generation service based on MSC classifications and deployed the maps resulting from ZBMath data in OpenStreetMap.</p>
           </div>
         </div>
-        <div class="col-lg-9 map-content">
+    </div> <!-- col3 -->
+    <div class="col-lg-9 map-content">
+      <div class="row content">
+        
+        <!-- <div class="col-lg-9 map-content"> -->
           <div id="map">
             
           </div>
-        </div>
+        <!-- </div> -->
       </div> <!-- row -->
-
+      </div><!-- col 9-->
+  </div> <!--row-->
       <script type="text/javascript" src="/static/jquery/jquery-2.0.3.min.js"></script>
       <script type="text/javascript" src="/static/leaflet/leaflet.js"></script>
       <script type="text/javascript" src="/static/leaflet/leafletembed.js"></script>

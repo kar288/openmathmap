@@ -31,12 +31,23 @@ class MSCPolygon(models.Model):
 		db_table = "planet_osm_polygon"
 
 class Author(models.Model):
-	name = models.CharField(max_length = 300)
+	name = models.CharField(max_length = 10000)
+	yearsum = models.IntegerField()
+	count = models.IntegerField()
+	distribution = models.TextField(max_length = 2000)
 
-class Publication(models.Model):
-	pid = models.IntegerField()
-	py = models.IntegerField(null = True)
-	# author = models.ManyToManyField(Author, related_name="publications", symmetrical = True)
-	author = models.CharField(max_length = 1000)
-	title = models.CharField(max_length = 1000)
-	classes = models.ManyToManyField(MSC, related_name="publications")
+
+class Author2(models.Model):
+	name = models.CharField(max_length = 10000)
+	yearsum = models.IntegerField()
+	count = models.IntegerField()
+	distribution = models.TextField(max_length = 200000)
+
+# class Publication(models.Model):
+# 	pid = models.IntegerField()
+# 	py = models.IntegerField(null = True)
+# 	# author = models.ManyToManyField(Author, related_name="publications", symmetrical = True)
+# 	author = models.CharField(max_length = 1000)
+# 	title = models.CharField(max_length = 1000)
+# 	classes = models.ManyToManyField(MSC, related_name="publications")
+

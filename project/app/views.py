@@ -32,6 +32,12 @@ def getMscs(request, type):
 
 	return HttpResponse(json.dumps({'html': response_data}), content_type="application/json");
 
+def getSearchForm(request):
+	template = loader.get_template('components/searchForm.html')
+	reqContext = RequestContext(request, {})
+	response_data = template.render(reqContext);
+
+	return HttpResponse(json.dumps({'html': response_data}), content_type="application/json");
 
 def getMSC(request, x, y, z):
 	data = {}
@@ -79,6 +85,108 @@ def get_search (request):
 
 	return HttpResponse(json.dumps({'centroids': 'good'}), content_type="application/json");
 
+def searchAuthor(request, term):
+	authors = Author.objects.all()
+
+	for word in re.split("[, ;]", term.strip()):
+		authors &= Author.objects.filter(name__icontains = word)
+
+	result = {}
+
+	for author in authors:
+		result[author.name] = {}
+		result[author.name]['yearsum'] = author.yearsum
+		result[author.name]['count'] = author.count
+		result[author.name]['largest'] = {}
+		result[author.name]['largest']['cc'] = 0
+		result[author.name]['largest']['count'] = 0
+
+		for c in author.distribution.split('.')[:-1]:
+			parts = c[1:].split(':')
+			if len(c[1:]) == 0:
+				continue;
+			if int(parts[1]) > result[author.name]['largest']['count']:
+				result[author.name]['largest']['count'] = int(parts[1])
+				result[author.name]['largest']['cc'] = ord(c[0]) - 1
+
+		number = str(result[author.name]['largest']['cc']) + '-XX'
+		if len(number) == 4:
+			number = "0" + number;
+
+		polygons = MSCPolygon.objects.filter(name__contains = number)
+
+		if len(polygons) > 0:
+			polygon = polygons[0]
+
+			centroid =  polygon.way.centroid
+			centroid.transform(4326)
+			result[author.name]['largest']['position'] = centroid.coords
+
+
+	return HttpResponse(json.dumps(result), content_type="application/json");
+
+
+def searchAuthorTimeline(request, term):	
+	author = Author.objects.filter(name = term)
+
+	if len(author) != 1:
+		return HttpResponse(json.dumps({'error': True}), content_type="application/json");
+
+	author = author[0]
+	result = {}
+	result = {}
+	result['yearsum'] = author.yearsum
+	result['count'] = author.count
+	result['largest'] = {}
+	result['largest']['cc'] = 0
+	result['largest']['count'] = 0
+	result['distribution'] = {}
+
+	ways = set()
+	for c in author.distribution.split('.')[:-1]:
+		parts = c[1:].split(':')
+		if len(c[1:]) == 0:
+			continue;
+	
+		number = str(ord(c[0]) - 1) + '-XX'
+		# number = str(ord(c[0])) + '-XX'
+		if len(number) == 4:
+			number = "0" + number;
+		polygon = MSCPolygon.objects.filter(name__contains = number)
+		if len(polygon) <= 0:
+			continue
+
+		if int(parts[1]) > result['largest']['count']:
+			result['largest']['count'] = parts[1]
+			result['largest']['cc'] = ord(c[0]) - 1
+
+		result['distribution'][ord(c[0]) - 1] = [parts[0],parts[1]]
+
+		polygon = polygon[0].way
+		ways.add(polygon)
+		polygon.transform(4326)
+
+		result['distribution'][ord(c[0]) - 1].append(polygon.json)
+		name = MSC.objects.filter(number__contains = number)
+		if len(name) > 0:
+			name = name[0].name
+			result['distribution'][ord(c[0]) - 1].append(name)
+		
+		result['distribution'][ord(c[0]) - 1].append(polygon.json)
+
+	number = str(result['largest']['cc']) + '-XX'
+	if len(number) == 4:
+		number = "0" + number;
+	polygon = MSCPolygon.objects.filter(name__contains = number)[0]
+
+	centroid =  polygon.way.centroid
+	centroid.transform(4326)
+	result['largest']['position'] = centroid.coords
+
+
+	return HttpResponse(json.dumps(result), content_type="application/json");
+
+
 def search(request, term, z, name = 1):
 	name = int(float(name))
 	mscs = MSC.objects.none()
@@ -120,7 +228,7 @@ def search(request, term, z, name = 1):
 
 def getWay(request, term, z):
 	mscs = MSC.objects.none()
-	print term
+
 
 	for word in re.split("[, ;]", term.strip()):
 		mscs |= MSC.objects.filter(number__icontains = word).exclude(main = 3)
@@ -151,6 +259,5 @@ def getWay(request, term, z):
 			ways[msc.number] = data;
 		except:
 			print 'bad', msc.number
-
 
 	return HttpResponse(json.dumps(ways), content_type="application/json");
