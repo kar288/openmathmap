@@ -114,7 +114,7 @@ def searchAuthor(request, term):
 			number = "0" + number;
 
 		polygons = MSCPolygon.objects.filter(name__contains = number)
-
+		print number, polygons
 		if len(polygons) > 0:
 			polygon = polygons[0]
 
