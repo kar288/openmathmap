@@ -278,7 +278,6 @@ function highlightFeature(e) {
    var layer = e.target;
 
 	layer.setStyle({
-		fillColor: '#78A700',
 		dashArray: '',
 		fillOpacity: 0.7
 	});
@@ -493,6 +492,9 @@ function rusinGradient() {
 	}
 	if (info._map) {
 		info.removeFrom(map)
+	}
+	if ($('.rusin').hasClass('not-selected')) {
+		return
 	}
 
 	map.spin(true)
