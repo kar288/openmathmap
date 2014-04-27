@@ -123,6 +123,15 @@ def searchAuthor(request, term):
 			result[author.name]['largest']['position'] = centroid.coords
 
 
+		template = loader.get_template('components/authorPopup.html')
+		name = author.name.split('.')
+
+		name = name[1] + " " + name[0]
+		reqContext = RequestContext(request, {'name': name, 'key': author.name})
+		response_data = template.render(reqContext);
+		result[author.name]['popup'] = response_data
+
+
 	return HttpResponse(json.dumps(result), content_type="application/json");
 
 

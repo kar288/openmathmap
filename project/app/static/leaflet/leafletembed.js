@@ -48,20 +48,12 @@ function main () {
 
 	$('.browse').click(buildMenu);
 
-	// type of search controls.
-	$('.search-by-class').click(function () {
-		updateSearch("c: ");
-	})
-	$('.search-by-formula').click(function () {
-		updateSearch("f: ");
-	})
-
 	rainbow = new Rainbow();
 	rainbow.setSpectrum('red', 'yellow');
 
 	
 }
-var b
+
 //Initialize everything related to the map.
 function initmap() {
     // Create map
@@ -120,10 +112,12 @@ function initmap() {
 
 
 	//filter button
-	var btn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topright', title: 'Select Markers'}]);
-	btn.on('clicked', filterMarkers);
-	map.addControl(btn);
+	var filterBtn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topright', title: 'Select Markers'}]);
+	filterBtn.on('clicked', filterMarkers);
+	map.addControl(filterBtn);
 
+	// Create search form
+	// Initialize proper event handlers
 	$.getJSON("/getSearchForm/", function(data) {
 		var mapSearch = L.control({position: 'topleft'})
 
@@ -148,80 +142,22 @@ function initmap() {
 
 	//gradient button
 	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected"><span class="glyphicon glyphicon-arrow-right">Timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
-
 	gradientBtn.on('clicked', gradient);
 	map.addControl(gradientBtn);
+
+	//Move zoom control 
 	map.zoomControl.setPosition("bottomleft")
 
-
-
+	// Div showing extra info about results
 	info = L.control({position: 'topleft'})
-
-	info.update = function (properties, general) {
-		
-
-		var type = properties.type;
-		var term = properties.term
-		var spacey = term.replace('.', ' ')
-		var name = L.Util.splitWords(spacey)
-
-    	var num = properties.class.toString()
-
-    	if (num.length < 2) {
-    		num = "0" + num
-    	} 
-
-		var min = properties.min
-		var max = properties.max
-
-		if (term.length > 0) {
-			if (!general) {
-				this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
-		    	if (type == "time") {
-			    	this._div.innerHTML +=  "Average year " + properties.year + " in " + properties.className
-			    } else {
-			    	this._div.innerHTML += properties.count + " publications in " + properties.className
-			    }
-			    return;
-			} else {
-				this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
-			    this._div.innerHTML += '<h5>' + type + ' information</h5>'
-				if (min == max) {
-					return;
-				}
-			}
-		} else {
-			if (general) {
-				this._div.innerHTML = "<h4> Average publication year per MSC</h4>"
-			} else {
-				this._div.innerHTML = "<h4> MSC" + num + "</h4>"
-				this._div.innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
-				this._div.innerHTML += "<span> Average year: " + properties.year + "</span>"
-				return
-			}
-		}
-
-
-		step = 25;
-		first = 0;
-
-
-		for (var i = 0; i < 5; i++) {
-			current =  Math.round(min + (max-min)*i*step/100)
-			next = Math.round(min + (max-min)*(i+1)*step/100) 
-			this._div.innerHTML +=
-	          '<i class="legend-i" style="background:' + "#" + rainbow.colourAt(step*i) + '"></i> <span class="legend-label">' +
-	          current + (i != 4 ? '&ndash;' + next  + '</span><br>' : '+');
-
-		}
-
-	};
+	info.update = update
 
 	info.onAdd = function (map) {
 		this._div = L.DomUtil.create('div', 'info');
 	    return this._div;
 	}
 
+	// Polygon layer initializing
 	geojson = L.geoJson(null,{
 		style: style,
 		onEachFeature: onEachFeature
@@ -230,6 +166,67 @@ function initmap() {
 
 }
 
+/********************** INFO DIV *************************/
+// Info div content updating
+function update (properties, general) {
+	var type = properties.type;
+	var term = properties.term
+	var spacey = term.replace('.', ' ')
+	var name = L.Util.splitWords(spacey)
+
+	var num = properties.class.toString()
+
+	if (num.length < 2) {
+		num = "0" + num
+	} 
+
+	var min = properties.min
+	var max = properties.max
+
+	if (term.length > 0) {
+		if (!general) {
+			this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
+	    	if (type == "time") {
+		    	this._div.innerHTML +=  "Average year " + properties.year + " in " + properties.className
+		    } else {
+		    	this._div.innerHTML += properties.count + " publications in " + properties.className
+		    }
+		    return;
+		} else {
+			this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
+		    this._div.innerHTML += '<h5>' + type + ' information</h5>'
+			if (min == max) {
+				this._div.innerHTML += '<div>All publications in ' + properties.className + '</div>'
+				this._div.innerHTML += '<div>Average publication year: ' + Math.round(min) + '</div>'
+				return;
+			}
+		}
+	} else {
+		if (general) {
+			this._div.innerHTML = "<h4> Average publication year per MSC</h4>"
+		} else {
+			this._div.innerHTML = "<h4> MSC" + num + "</h4>"
+			this._div.innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
+			this._div.innerHTML += "<span> Average year: " + properties.year + "</span>"
+			return
+		}
+	}
+
+	var step = 25;
+
+	for (var i = 0; i < 5; i++) {
+		current =  Math.round(min + (max-min)*i*step/100)
+		next = Math.round(min + (max-min)*(i+1)*step/100) 
+		this._div.innerHTML +=
+          '<i class="legend-i" style="background:' + "#" + rainbow.colourAt(step*i) + '"></i> <span class="legend-label">' +
+          current + (i != 4 ? '&ndash;' + next  + '</span><br>' : '+');
+
+	}
+
+};
+
+/********************** GEOJSON LAYER *************************/
+// style for each polygon
 function style(feature) {
 	return {
 		fillColor: "#" + rainbow.colourAt(feature.properties.colorCode),
@@ -237,26 +234,31 @@ function style(feature) {
 	};
 }
 
- function highlightFeature(e) {
-    var layer = e.target;
+// Whenever we hover on a polygon give it a specific color
+// Change the contents of the info div to just this polygon
+function highlightFeature(e) {
+   var layer = e.target;
 
-    layer.setStyle({
-      fillColor: '#78A700',
-      dashArray: '',
-      fillOpacity: 0.7
-    });
+	layer.setStyle({
+		fillColor: '#78A700',
+		dashArray: '',
+		fillOpacity: 0.7
+	});
 
-    if (!L.Browser.ie && !L.Browser.opera) {
-      layer.bringToFront();
-    }
+	if (!L.Browser.ie && !L.Browser.opera) {
+		layer.bringToFront();
+	}
 	info.update(layer.feature.properties, false);
 }
 
+// Whenever on mouse out of a polygon
+// if not going to any other polygon show general info
 function resetHighlight(e) {
 	geojson.resetStyle(e.target);
 	info.update(e.target.feature.properties, true);
 }
 
+// set events for each polygon
 function onEachFeature(feature, layer) {
 	layer.on({
   		mouseover: highlightFeature,
@@ -264,19 +266,25 @@ function onEachFeature(feature, layer) {
 	});
 }
 
+/********************** SEARCH FORM *************************/
 
+//Disable dragging when on top of the search form
 function controlEnter(e) {
     map.dragging.disable();
-    $('.tip').fadeIn()
 }
 function controlLeave() {
     map.dragging.enable();
     $('.tip').fadeOut()
 }
 
+/********************** POLYGON LAYERS *************************/
 
+// Average year of publications for all classes
 function gradient() {
+	// show button status
 	$('.timeline').toggleClass("not-selected").toggleClass("selected")
+
+	// if there were polygons before remove them and remove info div.
 	if (geojson) {
 		geojson.clearLayers()
 	}
@@ -285,13 +293,22 @@ function gradient() {
 		return
 	}
 
-	information = JSON.parse(yearcc)
-	total = 0;
+	// retrieve information
+	var information = JSON.parse(yearcc)
+
+	// Sum up all publications
+	var total = 0;
 	for (var i in information) {
 		total += information[i].count
 	}
+
 	map.spin(true)
+
+	// Retrieve geometry of all classes
 	$.getJSON("/getWay/,/1/", function(data) {
+
+		//Get min and max of publication year
+		//used to stretch out data between 0-100
 		var max = 0
 		var min = Number.POSITIVE_INFINITY
 
@@ -305,6 +322,8 @@ function gradient() {
 	   		max = Math.max(max, amount)
 		}
 
+		// for each class calculate its average year of publication
+		// stretch them between 0 and 100 to get a color code for rainbow
 	    for (var i in data) {
 	   		color = ""
 	   		num = i.slice(0,2)
@@ -318,6 +337,7 @@ function gradient() {
 
 			l = JSON.parse(data[i].way).coordinates[0]
 
+			// set properties for the polygon and to display info
 			properties = {}
 			properties.count = information[num].count
 			properties.year = Math.round(information[num].year/information[num].count)
@@ -328,15 +348,12 @@ function gradient() {
 			properties.class = i
 			makePolygon(l, amount, properties)
 		}
-		if (info._map) {
-			info.removeFrom(map)
-		}
 
+		// Add the information div to the map to display
 		info.addTo(map)
 
 		info.update(geojson.getLayers()[0].feature.properties, true);
 
-		// rebuildGradientLayer()
 		map.spin(false)
 	}, function(data) {
 		map.spin(false)
@@ -344,142 +361,8 @@ function gradient() {
 }
 
 
-// For each marker check if it is inside of a user created polygon
-// If it is not inside of any then remove it.
-function filterMarkers(removeMode) {
-	if (typeof removeMode == 'undefined') {
-		removeMode = true
-	} 
-	var polygons = drawnItems._layers
-    var ms = markerLayer._layers
-    if ($.isEmptyObject(polygons)) {
-    	console.log('returning, no polygons')
-    	return;
-    }
-
-    for (var i in ms) {
-    	check = 0;
-    	position = L.CRS.EPSG900913.project(ms[i]._latlng);
-    	title = ms[i]._popup._content;
-
-    	//check if inside
-    	for (var j in polygons) {
-	    	pos = L.CRS.EPSG900913.project(polygons[j]._latlng)
-	    	radius = polygons[j]._mRadius
-	    	var dist = Math.sqrt(Math.pow(position.x-pos.x,2) + Math.pow(position.y - pos.y,2))
-	    	if (dist < radius) {
-	    		check++;
-	    	} 
-	    }
-
-	    //remove marker
-	    if (check == 0) {
-	    	if (removeMode) {
-		    	markers = jQuery.grep(markers, function(value) {
-				  return value != ms[i];
-				});
-		    } else {
-		    	ms[i].setOpacity(0.5)
-		    	k = oms.markers.indexOf(ms[i])
-		    	oms.markers[k].setOpacity(0.5)
-		    }
-	    }
-    }
-
-    //rebuild marker layer
-	rebuildMarkerLayer()
-
-	if (removeMode) {
-		drawnItems.clearLayers()
-	}
-}
-
-
-// Search according to type of search. 
-// If empty don't try anything
-function search(event) {
-	event.preventDefault()
-
-	if (geojson) {
-		geojson.clearLayers()
-	}
-	if (info._map) {
-		info.removeFrom(map)
-	}
-
-	var term = $('.msc-search').val();
-	if (!term) {
-		return;
-	}
-	term = term.trim()
-	if (prefix == "c" || term.slice(0,2) == "c:") {
-		mscsearch(term.slice(2).trim());
-	} else if (term.slice(0,2) == "f:") {
-		//WHY IS IT GOING HERE? with: "General"
-		mathsearch(term.slice(2).trim());
-	} else if (term.slice(0,2) == "a:") {
-		//searching an author
-		authorsearch(term.slice(2).trim());
-	} else {
-		// mathsearch(term);
-		mscsearch(term);			
-	}
-}
-
-
-// Pull from database MSC data from given point
-function getMscData (e) {
-	a = e.latlng
-	pos = L.CRS.EPSG900913.project(e.latlng);
-	z = map.getZoom();
-	$.getJSON("/getMSC/" + pos.x + "/" + pos.y + "/" + z, function(data) {
-		if (data.water) {
-			return;
-		}
-		var popup = L.popup();
-		popup
-		    .setLatLng(e.latlng)
-		    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a href="' + data.zentralblatt + '">Zentralblatt</a>')
-		    .openOn(map);
-	});
-}
-
-// Query DB by msc name or number.
-function mscsearch(term) {
-	z = map.getZoom()
-	$.getJSON("/search/" + term  + "/" + z + "/1", function(data) {
-		markers = []
-		for(var key in data) {
-			entry = data[key]
-			content = '<h5>' + entry.number + '</h5>' + entry.name + '<br><a href="'+ entry.planetmath + '">PlanetMath</a><br> <a href="' + entry.zentralblatt + '">Zentralblatt</a>'
-			makeMarker(entry.position, content);
-		}
-		rebuildMarkerLayer()
-	});
-}
-
-function authorsearch(term) {
-	map.spin(true)
-	$.getJSON("/searchAuthor/" + term, function(data) {
-		markers = []
-		for (var key in data) {
-			entry = data[key]
-			spacey = key.replace('.', ' ')
-			var name = L.Util.splitWords(spacey)
-			content = '<div class="authorPopup"><h5>' + name[1] + ' ' + name[0] + '</h5>'
-			content += '<div class="row"><div class="col-sm-6"><button type="submit" author="' + key + '" class="timeline btn btn-primary btn-xs">Timeline</button></div>'
-			content += '<div class="col-sm-6"><button type="submit" author="' + key + '" class="classes btn btn-primary btn-xs">Classes</button></div></div></div>'
-			makeMarker(entry.largest.position, content)
-		}
-		rebuildMarkerLayer()
-		map.spin(false)
-	}, function(data) {
-		map.spin(false)
-	});
-}
-
-
-function searchAuthorGradient(term, type) {
+// Genereate gradient for a specific author
+function authorGradient(term, type) {
 	if (geojson) {
 		geojson.clearLayers()
 	}
@@ -537,10 +420,6 @@ function searchAuthorGradient(term, type) {
 
 		}
 
-
-		// rebuildGradientLayer()
-
-
 		if (info._map) {
 			info.removeFrom(map)
 		}
@@ -554,30 +433,61 @@ function searchAuthorGradient(term, type) {
 	});
 }
 
-// When buttons are pressed change type of search.
-function updateSearch(str) {
-	prefix = str[0];
-	
-	var term = $('.msc-search').val();
-	var tokens = ["f:","c:", "a:"]
-	if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
-		$('.msc-search').val(prefix + ": " + term.trim().slice(2).trim())
-	} else {
-		$('.msc-search').val(prefix + ": " + term.trim())
+
+/********************** FORMULA MARKERS *************************/
+
+// For each marker check if it is inside of a user created polygon
+// If it is not inside of any then remove it.
+function filterMarkers(removeMode) {
+	if (typeof removeMode == 'undefined') {
+		removeMode = true
+	} 
+	var polygons = drawnItems._layers
+    var ms = markerLayer._layers
+    if ($.isEmptyObject(polygons)) {
+    	console.error('returning, no polygons')
+    	return;
+    }
+
+    for (var i in ms) {
+    	check = 0;
+    	position = L.CRS.EPSG900913.project(ms[i]._latlng);
+    	title = ms[i]._popup._content;
+
+    	//check if inside
+    	for (var j in polygons) {
+	    	pos = L.CRS.EPSG900913.project(polygons[j]._latlng)
+	    	radius = polygons[j]._mRadius
+	    	var dist = Math.sqrt(Math.pow(position.x-pos.x,2) + Math.pow(position.y - pos.y,2))
+	    	if (dist < radius) {
+	    		check++;
+	    	} 
+	    }
+
+	    //remove marker
+	    if (check == 0) {
+	    	if (removeMode) {
+		    	markers = jQuery.grep(markers, function(value) {
+				  return value != ms[i];
+				});
+		    } else {
+		    	ms[i].setOpacity(0.5)
+		    	k = oms.markers.indexOf(ms[i])
+		    	oms.markers[k].setOpacity(0.5)
+		    }
+	    }
+    }
+
+    //rebuild marker layer
+	rebuildMarkerLayer()
+
+	if (removeMode) {
+		drawnItems.clearLayers()
 	}
 }
+/********************** INFORMATION MAP DISPLAY ************************/
 
-// Parse response just to get content
-function get_content_mathml(latexml_response) {
-	var hasContent = /<annotation-xml[^>]*\"MWS\-Query\"[^>]*>([\s\S]*)<\/annotation-xml>/;
-	var m = hasContent.exec(latexml_response);
-	var content = null;
-	if (m != null) {
-		content = m[1];
-	}
 
-	return content;
-}; 
 
 // Create a marker in position with title and possibly spiderfy
 function makeMarker(position, title) {
@@ -587,10 +497,10 @@ function makeMarker(position, title) {
 		.bindPopup(title)
 		.on('click', function () {
 			$('.timeline').click(function (e) {
-				searchAuthorGradient(this.attributes['author'].value, "time")
+				authorGradient(this.attributes['author'].value, "time")
 			})
 			$('.classes').click(function (e) {
-				searchAuthorGradient(this.attributes['author'].value, "amount")
+				authorGradient(this.attributes['author'].value, "amount")
 			})
 		})
 	markers.push(marker)
@@ -611,28 +521,15 @@ function makePolygon(l, colorCode, properties) {
 	polygon.setStyle({color: "#" + rainbow.colourAt(colorCode)})
 	polyJson = polygon.toGeoJSON()
 
-
 	polyJson.properties = properties
 
 	geojson.addData(polyJson)
 }
 
 // Given a change to the markers rebuild the layer that contains them
-function rebuildGradientLayer() {
-	if (gradientLayer && gradientLayer.getLayers().length > 0) {
-		gradientLayer.clearLayers()
-		gradientPolygons = []
-	} else {
-		gradientLayer = L.layerGroup(gradientPolygons)
-		gradientLayer.addTo(map)
-	}
-}
-
-// Given a change to the markers rebuild the layer that contains them
 function rebuildMarkerLayer() {
 	if (markerLayer) {
 		markerLayer.clearLayers()
-		// markers = []
 	}
 	markerLayer = L.layerGroup(markers)
 	markerLayer.addTo(map)
@@ -661,6 +558,121 @@ function displayArticles(allClasses, markers, z) {
 	});
 }
 
+
+/********************** SEARCH METHODS *************************/
+
+// Search according to type of search. 
+// If empty don't try anything
+function search(event) {
+	event.preventDefault()
+
+	if (geojson) {
+		geojson.clearLayers()
+	}
+	if (info._map) {
+		info.removeFrom(map)
+	}
+
+	var term = $('.msc-search').val();
+	if (!term) {
+		return;
+	}
+	term = term.trim()
+	if (prefix == "c" || term.slice(0,2) == "c:") {
+		mscsearch(term.slice(2).trim());
+	} else if (term.slice(0,2) == "f:") {
+		//WHY IS IT GOING HERE? with: "General"
+		mathsearch(term.slice(2).trim());
+	} else if (term.slice(0,2) == "a:") {
+		//searching an author
+		authorsearch(term.slice(2).trim());
+	} else {
+		mscsearch(term, true);
+		authorsearch(term, true);
+	}
+}
+
+
+// Pull from database MSC data from given point
+function getMscData (e) {
+	a = e.latlng
+	pos = L.CRS.EPSG900913.project(e.latlng);
+	z = map.getZoom();
+	$.getJSON("/getMSC/" + pos.x + "/" + pos.y + "/" + z, function(data) {
+		if (data.water) {
+			return;
+		}
+		var popup = L.popup();
+		popup
+		    .setLatLng(e.latlng)
+		    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a href="' + data.zentralblatt + '">Zentralblatt</a>')
+		    .openOn(map);
+	});
+}
+
+// Query DB by msc name or number.
+function mscsearch(term, composed) {
+	z = map.getZoom()
+	$.getJSON("/search/" + term  + "/" + z + "/1", function(data) {
+		if (!composed) {
+			markers = []
+		}
+		for(var key in data) {
+			entry = data[key]
+			content = '<h5>' + entry.number + '</h5>' + entry.name + '<br><a href="'+ entry.planetmath + '">PlanetMath</a><br> <a href="' + entry.zentralblatt + '">Zentralblatt</a>'
+			makeMarker(entry.position, content);
+		}
+		rebuildMarkerLayer()
+	});
+}
+
+// Search authors in the db
+function authorsearch(term, composed) {
+	map.spin(true)
+	$.getJSON("/searchAuthor/" + term, function(data) {
+		if (!composed) {
+			markers = []
+		}
+		for (var key in data) {
+			var entry = data[key]
+			var spacey = key.replace('.', ' ')
+			var name = L.Util.splitWords(spacey)
+			content = entry.popup
+			makeMarker(entry.largest.position, content)
+		}
+		rebuildMarkerLayer()
+		map.spin(false)
+	}, function(data) {
+		map.spin(false)
+	});
+}
+
+
+// When buttons are pressed change type of search.
+function updateSearch(str) {
+	prefix = str[0];
+
+	var term = $('.msc-search').val();
+	var tokens = ["f:","c:", "a:"]
+	if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
+		$('.msc-search').val(prefix + ": " + term.trim().slice(2).trim())
+	} else {
+		$('.msc-search').val(prefix + ": " + term.trim())
+	}
+}
+
+// Parse response just to get content
+function get_content_mathml(latexml_response) {
+	var hasContent = /<annotation-xml[^>]*\"MWS\-Query\"[^>]*>([\s\S]*)<\/annotation-xml>/;
+	var m = hasContent.exec(latexml_response);
+	var content = null;
+	if (m != null) {
+		content = m[1];
+	}
+
+	return content;
+}; 
+
 // Given a search tearm query API with previously gotten Latex 
 function getArticles(data, term) {
 	console.log('getARTICLES')
@@ -681,7 +693,7 @@ function getArticles(data, term) {
 		allClasses = {}
 		if (data1.hits.length == 0) {
 			map.spin(false)
-			console.log('no results with formula search')
+			console.error('No results with formula search.')
 			return;
 		}
 		// Build object containing the title and class of result
@@ -709,7 +721,7 @@ function getArticles(data, term) {
 
 	}).fail(function(data1){
 		map.spin(false)
-		console.log("BAD"); 
+		console.error("BAD"); 
 	}); 
 }
 
@@ -723,7 +735,7 @@ function convert(term) {
 		getArticles(data, term);
 	}).fail(function() {
 		map.spin(false)
-	    console.log("Unable to query server. ");
+	    console.error("Unable to query server.");
 	})
 }
 
