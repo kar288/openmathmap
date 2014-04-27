@@ -55,7 +55,6 @@ for author in authors:
 		for c in authors[author]['classes']:
 			description += chr(int(c)+1) + str(authors[author]['classes'][c][0]) + ":" + str(authors[author]['classes'][c][1]) + "."
 		a = Author.objects.create(name = author, yearsum = authors[author]['yearsum'], count = authors[author]['count'], distribution = description)
-
 		a.save()
 
 # f = open('../data/try1.txt', 'w')
