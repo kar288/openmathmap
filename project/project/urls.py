@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 	url(r'^getWay/(?P<term>[\w|\W]+)/(?P<z>[0-9_@\+\-\.]+)/$', 'app.views.getWay', name='getWay'),
 	url(r'^searchAuthor/(?P<term>[\w|\W]+)/$', 'app.views.searchAuthor', name='searchAuthor'),
 	url(r'^searchAuthorTimeline/(?P<term>[\w|\W]+)/$', 'app.views.searchAuthorTimeline', name='searchAuthorTimeline'),
-	url(r'^intersection$', 'app.views.get_search', name='get_search'),
+	url(r'^getRusinClasses$', 'app.views.getRusinClasses', name='getRusinClasses'),
 )
 
 urlpatterns += staticfiles_urlpatterns()

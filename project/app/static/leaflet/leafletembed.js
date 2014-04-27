@@ -28,11 +28,14 @@ var oms
 var drawnItems
 var gradientLayer;
 var gradientPolygons = []
-var gradientBtn
+var gradientBtn;
+var rusinBtn;
 
 var info;
 
 var prefix = ""
+
+var rusinClasses;
 
 $(document).ready(main);
 
@@ -50,6 +53,10 @@ function main () {
 
 	rainbow = new Rainbow();
 	rainbow.setSpectrum('red', 'yellow');
+
+	$.getJSON("/getRusinClasses", function (data) {
+		rusinClasses = data;
+	})
 
 	
 }
@@ -140,10 +147,16 @@ function initmap() {
 	})
 	
 
+	//rusin button
+	rusinBtn = L.functionButtons([{ content: '<div class="rusin map-button not-selected">General Categories</div>' , position: 'bottomleft', title: 'Gradient'}]);
+	rusinBtn.on('clicked', rusinGradient);
+	map.addControl(rusinBtn);
+
 	//gradient button
 	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected"><span class="glyphicon glyphicon-arrow-right">Timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
 	gradientBtn.on('clicked', gradient);
 	map.addControl(gradientBtn);
+
 
 	//Move zoom control 
 	map.zoomControl.setPosition("bottomleft")
@@ -169,6 +182,22 @@ function initmap() {
 /********************** INFO DIV *************************/
 // Info div content updating
 function update (properties, general) {
+	if (properties.rusinName) {
+		self = this
+		if (general) {
+			self._div.innerHTML = '<h4>General Categories</h4>'
+			for (var k in rusinClasses) {
+				self._div.innerHTML += '<i class="legend-i" style="background:' + rusinClasses[k].color + '"></i> <span class="legend-label">' +
+          		rusinClasses[k].name  + '</span><br>';
+			}
+			return;
+		} else {
+			self._div.innerHTML = '<h4>' + properties.className + '</h4>'
+			self._div.innerHTML += '<div> Belongs in the ' + properties.rusinName + ' category</div>'
+			return
+		}
+	}
+
 	var type = properties.type;
 	var term = properties.term
 	var spacey = term.replace('.', ' ')
@@ -205,7 +234,7 @@ function update (properties, general) {
 		if (general) {
 			this._div.innerHTML = "<h4> Average publication year per MSC</h4>"
 		} else {
-			this._div.innerHTML = "<h4> MSC" + num + "</h4>"
+			this._div.innerHTML = "<h4>" + properties.className + "</h4>"
 			this._div.innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
 			this._div.innerHTML += "<span> Average year: " + properties.year + "</span>"
 			return
@@ -228,10 +257,19 @@ function update (properties, general) {
 /********************** GEOJSON LAYER *************************/
 // style for each polygon
 function style(feature) {
-	return {
-		fillColor: "#" + rainbow.colourAt(feature.properties.colorCode),
-		color: "#" + rainbow.colourAt(feature.properties.colorCode),
-	};
+	if (feature.properties.colorCode) {
+		return {			
+			fillColor: "#" + rainbow.colourAt(feature.properties.colorCode),
+			color: "#" + rainbow.colourAt(feature.properties.colorCode),
+
+		}
+	}
+	if (feature.properties.color) {
+		return {			
+			fillColor: feature.properties.color,
+			color: feature.properties.color,
+		}
+	}
 }
 
 // Whenever we hover on a polygon give it a specific color
@@ -284,12 +322,18 @@ function gradient() {
 	// show button status
 	$('.timeline').toggleClass("not-selected").toggleClass("selected")
 
+	if ($('.rusin').hasClass("selected")) {
+		$('.rusin').toggleClass("not-selected").toggleClass("selected")
+	}
+
 	// if there were polygons before remove them and remove info div.
 	if (geojson) {
 		geojson.clearLayers()
 	}
 	if (info._map) {
 		info.removeFrom(map)
+	}
+	if ($('.timeline').hasClass('not-selected')) {
 		return
 	}
 
@@ -343,10 +387,11 @@ function gradient() {
 			properties.year = Math.round(information[num].year/information[num].count)
 			properties.min = min
 			properties.max = max
-			properties.colorCode = amount
+			properties.colorCode = amount + 1
 			properties.term = ""
 			properties.class = i
-			makePolygon(l, amount, properties)
+			properties.className = data[i].name
+			makePolygon(l, properties)
 		}
 
 		// Add the information div to the map to display
@@ -410,13 +455,13 @@ function authorGradient(term, type) {
 				properties.type = "count"
 				properties.count = cc[1]
 			}
-			properties.colorCode = amount
+			properties.colorCode = amount + 1
 			properties.term = term
 			properties.min = min
 			properties.max = max
 			properties.class = i
 			properties.className = cc[3]
-			makePolygon(l, amount, properties)
+			makePolygon(l, properties)
 
 		}
 
@@ -432,6 +477,59 @@ function authorGradient(term, type) {
 		
 	});
 }
+
+function rusinGradient() { 
+// show button status
+	$('.rusin').toggleClass("not-selected").toggleClass("selected")
+
+
+	if ($('.timeline').hasClass("selected")) {
+		$('.timeline').toggleClass("not-selected").toggleClass("selected")
+	}
+
+	// if there were polygons before remove them and remove info div.
+	if (geojson) {
+		geojson.clearLayers()
+	}
+	if (info._map) {
+		info.removeFrom(map)
+	}
+
+	map.spin(true)
+
+	// Retrieve geometry of all classes
+	$.getJSON("/getWay/,/1/", function(data) {
+		// for each class calculate its average year of publication
+		// stretch them between 0 and 100 to get a color code for rainbow
+	    for (var i in data) {
+	   		color = ""
+	   		num = i.slice(0,2)
+
+			l = JSON.parse(data[i].way).coordinates[0]
+
+			// set properties for the polygon and to display info
+			properties = {}
+			properties.rusinName = data[i].rusinName
+			properties.color = data[i].rusinColor
+			properties.term = ""
+			properties.class = i
+			properties.className = data[i].name
+			makePolygon(l, properties)
+		}
+
+		// Add the information div to the map to display
+		info.addTo(map)
+
+		info.update(geojson.getLayers()[0].feature.properties, true);
+
+		map.spin(false)
+
+		
+	}, function(data) {
+		map.spin(false)
+	});
+}
+
 
 
 /********************** FORMULA MARKERS *************************/
@@ -509,7 +607,7 @@ function makeMarker(position, title) {
 
 
 // Create a marker in position with title and possibly spiderfy
-function makePolygon(l, colorCode, properties) {
+function makePolygon(l, properties) {
 	for (var i in l) {
 	   l[i][1] += l[i][0]
 	   l[i][0] = l[i][1] - l[i][0]
@@ -517,10 +615,7 @@ function makePolygon(l, colorCode, properties) {
 	}
 
 	polygon = L.polygon(l)
-
-	polygon.setStyle({color: "#" + rainbow.colourAt(colorCode)})
 	polyJson = polygon.toGeoJSON()
-
 	polyJson.properties = properties
 
 	geojson.addData(polyJson)
@@ -566,9 +661,9 @@ function displayArticles(allClasses, markers, z) {
 function search(event) {
 	event.preventDefault()
 
-	if (geojson) {
-		geojson.clearLayers()
-	}
+	// if (geojson) {
+	// 	geojson.clearLayers()
+	// }
 	if (info._map) {
 		info.removeFrom(map)
 	}
@@ -587,6 +682,7 @@ function search(event) {
 		//searching an author
 		authorsearch(term.slice(2).trim());
 	} else {
+		markers = []
 		mscsearch(term, true);
 		authorsearch(term, true);
 	}

@@ -11,11 +11,18 @@ LEVEL = (
 )
 
 
+class RusinClass(models.Model):
+	rusin_id = models.IntegerField()
+	name = models.CharField(max_length = 200)
+	color = models.CharField(max_length = 10)
+
 class MSC(models.Model):
 	main = models.IntegerField(choices = LEVEL, default = FIRST)
 	name = models.CharField(max_length = 200)
 	number = models.CharField(max_length = 10)
 	child = models.ManyToManyField('self', related_name='parent', symmetrical=True)
+	rusin = models.ForeignKey(RusinClass, related_name = 'classes', null = True)
+
 
 class MSCPolygon(models.Model):
 	osm_id = models.BigIntegerField(primary_key=True)

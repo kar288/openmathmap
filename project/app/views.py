@@ -265,8 +265,22 @@ def getWay(request, term, z):
 			data['name'] = msc.name
 			data['planetmath'] = getPlanetmath(msc.number)
 			data['zentralblatt'] = getZentralblatt(msc.number)
+			data['rusinColor'] = msc.rusin.color
+			data['rusinName'] = msc.rusin.name
 			ways[msc.number] = data;
 		except:
 			print 'bad', msc.number
 
 	return HttpResponse(json.dumps(ways), content_type="application/json");
+
+def getRusinClasses(request):
+	rusinClasses = RusinClass.objects.all()
+
+	data = {}
+
+	for rusinClass in rusinClasses:
+		data[rusinClass.rusin_id] = {}
+		data[rusinClass.rusin_id]['name'] = rusinClass.name
+		data[rusinClass.rusin_id]['color'] = rusinClass.color
+
+	return HttpResponse(json.dumps(data), content_type="application/json")
