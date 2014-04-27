@@ -51,10 +51,11 @@ f.close()
 
 for author in authors:
 	if len(author) > 0:
-		description = ""
-		for c in authors[author]['classes']:
-			description += chr(int(c)+1) + str(authors[author]['classes'][c][0]) + ":" + str(authors[author]['classes'][c][1]) + "."
-		a = Author.objects.create(name = author, yearsum = authors[author]['yearsum'], count = authors[author]['count'], distribution = description)
+		# description = ""
+		# classes = author['description'].split('.')
+		# for c in classes:
+			# description += chr(int(c)+1) + str(authors[author]['classes'][c][0]) + ":" + str(authors[author]['classes'][c][1]) + "."
+		a = Author.objects.create(name = author, yearsum = authors[author]['yearsum'], count = authors[author]['count'], distribution = authors[author]['description'])
 		a.save()
 
 # f = open('../data/try1.txt', 'w')
