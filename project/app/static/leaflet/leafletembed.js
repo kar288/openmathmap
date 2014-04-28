@@ -36,6 +36,7 @@ var info;
 var prefix = ""
 
 var rusinClasses;
+var drawControl;
 
 $(document).ready(main);
 
@@ -88,7 +89,7 @@ function initmap() {
 	map.addLayer(drawnItems);
 
 	// Initialise the draw control and pass it the FeatureGroup of editable layers
-	var drawControl = new L.Control.Draw({
+	drawControl = new L.Control.Draw({
 		draw: {
 			polyline: false,
 			marker: false, 
@@ -148,12 +149,12 @@ function initmap() {
 	
 
 	//rusin button
-	rusinBtn = L.functionButtons([{ content: '<div class="rusin map-button not-selected">General Categories</div>' , position: 'bottomleft', title: 'Gradient'}]);
+	rusinBtn = L.functionButtons([{ content: '<div class="rusin map-button not-selected text-button">General Categories</div>' , position: 'bottomleft', title: 'Gradient'}]);
 	rusinBtn.on('clicked', rusinGradient);
 	map.addControl(rusinBtn);
 
 	//gradient button
-	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected"><span class="glyphicon glyphicon-arrow-right">Timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
+	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected text-button"><span class="glyphicon glyphicon-arrow-right">Timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
 	gradientBtn.on('clicked', gradient);
 	map.addControl(gradientBtn);
 
@@ -223,10 +224,20 @@ function update (properties, general) {
 		    return;
 		} else {
 			this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
-		    this._div.innerHTML += '<h5>' + type + ' information</h5>'
+		    var color;
+		    if (type == "time") {
+		    	this._div.innerHTML += '<h5>Average year: </h5>'
+		    	color = 100;
+		    } else if (type == "count") {
+		    	this._div.innerHTML += '<h5> Amount of publications </h5>'
+		    	color = 0
+		    }
 			if (min == max) {
-				this._div.innerHTML += '<div>All publications in ' + properties.className + '</div>'
-				this._div.innerHTML += '<div>Average publication year: ' + Math.round(min) + '</div>'
+				this._div.innerHTML +=
+		          '<i class="legend-i" style="background:' + "#" + rainbow.colourAt(color) + '"></i> <span class="legend-label">' +
+		          min + '</span><br>';
+				// this._div.innerHTML += '<div>All publications in ' + properties.className + '</div>'
+				// this._div.innerHTML += '<div>Average publication year: ' + Math.round(min) + '</div>'
 				return;
 			}
 		}
@@ -677,9 +688,20 @@ function search(event) {
 	term = term.trim()
 	if (prefix == "c" || term.slice(0,2) == "c:") {
 		mscsearch(term.slice(2).trim());
-	} else if (term.slice(0,2) == "f:") {
+	} else if (term.slice(0,2) == "f:" || term.slice(0,2) == "t:") {
+		var indexF = term.indexOf("f:")
+		var indexT = term.indexOf("t:")
+		var formula, text;
+		if (indexF > indexT) {
+			text = term.slice(indexT+2, indexF)
+			formula = term.slice(indexF+2)
+		} else {
+			formula = term.slice(indexF+2, indexT)
+			text = term.slice(indexT+2)
+		}
+		console.log(formula, text)
 		//WHY IS IT GOING HERE? with: "General"
-		mathsearch(term.slice(2).trim());
+		mathsearch(formula, text);
 	} else if (term.slice(0,2) == "a:") {
 		//searching an author
 		authorsearch(term.slice(2).trim());
@@ -751,10 +773,27 @@ function updateSearch(str) {
 	prefix = str[0];
 
 	var term = $('.msc-search').val();
-	var tokens = ["f:","c:", "a:"]
-	if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
+	var tokens = ["f:","c:", "a:", "t:"]
+	if (term.trim().slice(0,2) == "f:" && prefix == "t") {
+		console.log('bla')
+		$('.msc-search').val(term + " t: ")
+		return
+	} else if (term.trim().slice(0,2) == "t:" && prefix == "f") {
+		console.log("f: t--")
+		$('.msc-search').val(term + " f: ")
+		return
+	} else if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
+		console.log('no f or t adding something')
+		if (term.trim().indexOf("t:") > 0) {
+			term = term.slice(0,term.indexOf("t:"))
+		} else if (term.trim().indexOf("f:") > 0) {
+			term = term.slice(0,term.indexOf("f:"))
+		}
+		console.log(term)
 		$('.msc-search').val(prefix + ": " + term.trim().slice(2).trim())
+		return
 	} else {
+		console.log('no prefix')
 		$('.msc-search').val(prefix + ": " + term.trim())
 	}
 }
@@ -772,17 +811,18 @@ function get_content_mathml(latexml_response) {
 }; 
 
 // Given a search tearm query API with previously gotten Latex 
-function getArticles(data, term) {
-	console.log('getARTICLES')
+function getArticles(data, text) {
+	// console.log('getARTICLES')
 	result = data.result
 	content = get_content_mathml(result);
 	send = {
-		"text": term,
+		"text": text,
 		"math": content,
 		"from": 0,
 		"size": 20,
 	}
 	var results = [];
+	console.log(send)
 	$.ajax({
 	   type: 'GET',
 	   url: "http://search.mathweb.org/zbl/php/tema_proxy.php",
@@ -824,13 +864,13 @@ function getArticles(data, term) {
 }
 
 // Given a term convert it to proper latexml
-function convert(term) {
+function convert(formula, text) {
 	$.post("http://latexml.mathweb.org/convert", {
 		profile: 'mwsq',
-		tex: term,
+		tex: formula,
 	}, function (data) {
 		//
-		getArticles(data, term);
+		getArticles(data, text);
 	}).fail(function() {
 		map.spin(false)
 	    console.error("Unable to query server.");
@@ -838,10 +878,10 @@ function convert(term) {
 }
 
 // Given a term find all articles that contain it in abstract, using API
-function mathsearch(term) {
+function mathsearch(formula, text) {
 	markers = []
 	map.spin(true);
-	convert(term);
+	convert(formula, text);
 }
 
 function buildMenu() {
