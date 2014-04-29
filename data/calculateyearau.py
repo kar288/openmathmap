@@ -4,7 +4,7 @@ from app.models import *
 
 # f = open('../data/yearaicc.txt', 'r')
 
-f = open('../data/jsonyearaicc.txt', 'r')
+f = open('../data/try1.txt', 'r')
 
 authors = {}
 

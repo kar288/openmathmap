@@ -37,6 +37,7 @@ var prefix = ""
 
 var rusinClasses;
 var drawControl;
+var filterBtn;
 
 $(document).ready(main);
 
@@ -99,13 +100,13 @@ function initmap() {
 	    edit: {
 	        featureGroup: drawnItems
 	    },
-	    position: "topright"
+	    position: "topleft"
 	});
 
 	L.drawLocal.draw.toolbar.buttons.circle = 'Select markers.';
 
 	L.drawLocal.draw.handlers.circle.tooltip.start += "<br> Select the markers you want to keep.";
-	map.addControl(drawControl);
+	// map.addControl(drawControl);
 
 	map.on('draw:created', function (e) {
 		var type = e.layerType,
@@ -120,9 +121,9 @@ function initmap() {
 
 
 	//filter button
-	var filterBtn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topright', title: 'Select Markers'}]);
+	filterBtn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topleft', title: 'Select Markers'}]);
 	filterBtn.on('clicked', filterMarkers);
-	map.addControl(filterBtn);
+	// map.addControl(filterBtn);
 
 	// Create search form
 	// Initialize proper event handlers
@@ -154,7 +155,7 @@ function initmap() {
 	map.addControl(rusinBtn);
 
 	//gradient button
-	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected text-button"><span class="glyphicon glyphicon-arrow-right">Timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
+	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected text-button"><span class="glyphicon glyphicon-arrow-right">Class timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
 	gradientBtn.on('clicked', gradient);
 	map.addControl(gradientBtn);
 
@@ -182,22 +183,12 @@ function initmap() {
 
 /********************** INFO DIV *************************/
 // Info div content updating
-function update (properties, general) {
-	if (properties.rusinName) {
-		self = this
-		if (general) {
-			self._div.innerHTML = '<h4>General Categories</h4>'
-			for (var k in rusinClasses) {
-				self._div.innerHTML += '<i class="legend-i" style="background:' + rusinClasses[k].color + '"></i> <span class="legend-label">' +
-          		rusinClasses[k].name  + '</span><br>';
-			}
-			return;
-		} else {
-			self._div.innerHTML = '<h4>' + properties.className + '</h4>'
-			self._div.innerHTML += '<div> Belongs in the ' + properties.rusinName + ' category</div>'
-			return
-		}
-	}
+function update (innerHTML) {
+	this._div.innerHTML = innerHTML
+};
+
+function updateGradientDiv(properties, general) {
+	var innerHTML
 
 	var type = properties.type;
 	var term = properties.term
@@ -215,40 +206,41 @@ function update (properties, general) {
 
 	if (term.length > 0) {
 		if (!general) {
-			this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
+			innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
 	    	if (type == "time") {
-		    	this._div.innerHTML +=  "Average year " + properties.year + " in " + properties.className
+		    	innerHTML +=  "Average year " + properties.year + " in " + properties.className
 		    } else {
-		    	this._div.innerHTML += properties.count + " publications in " + properties.className
+		    	innerHTML += properties.count + " publications in " + properties.className
 		    }
-		    return;
+			return info.update(innerHTML)
 		} else {
-			this._div.innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
+			innerHTML = '<h4>' + name[1] + ' ' + name[0] + '</h4>'
 		    var color;
 		    if (type == "time") {
-		    	this._div.innerHTML += '<h5>Average year: </h5>'
+		    	innerHTML += '<h5>Average year: </h5>'
 		    	color = 100;
 		    } else if (type == "count") {
-		    	this._div.innerHTML += '<h5> Amount of publications </h5>'
+		    	innerHTML += '<h5> Total number of publications: ' + properties.total + '</h5>'
+		    	innerHTML += '<h5> Amount of publications </h5>'
 		    	color = 0
 		    }
 			if (min == max) {
-				this._div.innerHTML +=
+				innerHTML +=
 		          '<i class="legend-i" style="background:' + "#" + rainbow.colourAt(color) + '"></i> <span class="legend-label">' +
 		          min + '</span><br>';
 				// this._div.innerHTML += '<div>All publications in ' + properties.className + '</div>'
 				// this._div.innerHTML += '<div>Average publication year: ' + Math.round(min) + '</div>'
-				return;
+				return info.update(innerHTML)
 			}
 		}
 	} else {
 		if (general) {
-			this._div.innerHTML = "<h4> Average publication year per MSC</h4>"
+			innerHTML = "<h4> Average publication year per MSC</h4>"
 		} else {
-			this._div.innerHTML = "<h4>" + properties.className + "</h4>"
-			this._div.innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
-			this._div.innerHTML += "<span> Average year: " + properties.year + "</span>"
-			return
+			innerHTML = "<h4>" + properties.className + "</h4>"
+			innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
+			innerHTML += "<span> Average year: " + properties.year + "</span>"
+			return info.update(innerHTML)
 		}
 	}
 
@@ -257,15 +249,79 @@ function update (properties, general) {
 	for (var i = 0; i < 5; i++) {
 		current =  Math.round(min + (max-min)*i*step/100)
 		next = Math.round(min + (max-min)*(i+1)*step/100) 
-		this._div.innerHTML +=
+		innerHTML +=
           '<i class="legend-i" style="background:' + "#" + rainbow.colourAt(step*i) + '"></i> <span class="legend-label">' +
           current + (i != 4 ? '&ndash;' + next  + '</span><br>' : '+');
 
 	}
+	return info.update(innerHTML)
+}
 
-};
+function updateRusinDiv(properties, general) {
+	var innerHTML;
+	if (general) {
+		innerHTML = '<h4>General Categories</h4>'
+		for (var k in rusinClasses) {
+			innerHTML += '<i class="legend-i" style="background:' + rusinClasses[k].color + '"></i> <span class="legend-label">' +
+      		rusinClasses[k].name  + '</span><br>';
+		}
+		return info.update(innerHTML)
+	} else {
+		innerHTML = '<h4>' + properties.className + '</h4>'
+		innerHTML += '<div> Belongs in the ' + properties.rusinName + ' category</div>'
+		return info.update(innerHTML)
+	}
+	
+}
+
+function updateAuthorLinkDiv(data) {
+	if (!info._map) {
+		info.addTo(map)
+	}
+	if ($.isEmptyObject(data)) {
+		return info.update("<h4> No results </h4>")
+	}
+	var authorLink = "http://zbmath.org/authors/?s=0&c=100&q="
+	var query = ""
+	for (var key in data) {
+		var entry = data[key]
+		if (query.length > 0) {
+			query += "|"
+		}
+		query += key
+	}
+	var innerHTML = "<h4> All results: " + '<a href="' + authorLink + query + '" target="_blank">zbMATH</a>' + " </h4>"
+	info.update(innerHTML)
+}
+
+function updatePapersLinkDiv(numbers) {
+	if (!info._map) {
+		info.addTo(map)
+	}
+	if ($.isEmptyObject(numbers)) {
+		return info.update("<h4> No results </h4>")
+	}
+	var paperLink = "http://zbmath.org/?q=" //"an:"
+	var query = ""
+
+	for (var number in numbers) {
+		if (query.length > 0) {
+			query += "|"
+		}
+		query += 'an:' +  number
+	}
+	var innerHTML = "<h4> All results: " + '<a href="' + paperLink + query + '" target="_blank">zbMATH</a>' + " </h4>"
+	info.update(innerHTML)
+}
 
 /********************** GEOJSON LAYER *************************/
+
+function clearGeoJSON() {
+	if (geojson) {
+		geojson.clearLayers()
+	}
+}
+
 // style for each polygon
 function style(feature) {
 	if (feature.properties.colorCode) {
@@ -296,14 +352,23 @@ function highlightFeature(e) {
 	if (!L.Browser.ie && !L.Browser.opera) {
 		layer.bringToFront();
 	}
-	info.update(layer.feature.properties, false);
+	if (e.target.feature.properties.rusinName) {
+		updateRusinDiv(layer.feature.properties, false);
+	} else {
+		updateGradientDiv(layer.feature.properties, false)
+	}
 }
 
 // Whenever on mouse out of a polygon
 // if not going to any other polygon show general info
 function resetHighlight(e) {
 	geojson.resetStyle(e.target);
-	info.update(e.target.feature.properties, true);
+	if (e.target.feature.properties.rusinName) {
+		updateRusinDiv(e.target.feature.properties, true);
+	} else {
+		updateGradientDiv(e.target.feature.properties, true)
+	}
+	
 }
 
 // set events for each polygon
@@ -337,9 +402,7 @@ function gradient() {
 	}
 
 	// if there were polygons before remove them and remove info div.
-	if (geojson) {
-		geojson.clearLayers()
-	}
+	clearGeoJSON()
 	if (info._map) {
 		info.removeFrom(map)
 	}
@@ -407,7 +470,7 @@ function gradient() {
 		// Add the information div to the map to display
 		info.addTo(map)
 
-		info.update(geojson.getLayers()[0].feature.properties, true);
+		updateGradientDiv(geojson.getLayers()[0].feature.properties, true);
 
 		map.spin(false)
 	}, function(data) {
@@ -418,9 +481,7 @@ function gradient() {
 
 // Genereate gradient for a specific author
 function authorGradient(term, type) {
-	if (geojson) {
-		geojson.clearLayers()
-	}
+	clearGeoJSON()
 
 	map.spin(true)
 	$.getJSON("/searchAuthorTimeline/" + term, function(data) {
@@ -469,6 +530,7 @@ function authorGradient(term, type) {
 			properties.term = term
 			properties.min = min
 			properties.max = max
+			properties.total = data.count
 			properties.class = i
 			properties.className = cc[3]
 			makePolygon(l, properties)
@@ -481,7 +543,7 @@ function authorGradient(term, type) {
 
 		info.addTo(map)
 
-		info.update(geojson.getLayers()[0].feature.properties, true);
+		updateGradientDiv(geojson.getLayers()[0].feature.properties, true);
 		map.spin(false)
 		
 		
@@ -533,7 +595,7 @@ function rusinGradient() {
 		// Add the information div to the map to display
 		info.addTo(map)
 
-		info.update(geojson.getLayers()[0].feature.properties, true);
+		updateRusinDiv(geojson.getLayers()[0].feature.properties, true);
 
 		map.spin(false)
 
@@ -559,6 +621,7 @@ function filterMarkers(removeMode) {
     	console.error('returning, no polygons')
     	return;
     }
+    var numbers = {}
 
     for (var i in ms) {
     	check = 0;
@@ -586,8 +649,12 @@ function filterMarkers(removeMode) {
 		    	k = oms.markers.indexOf(ms[i])
 		    	oms.markers[k].setOpacity(0.5)
 		    }
+	    } else {
+	    	numbers[ms[i].options.number] = true
 	    }
     }
+
+    updatePapersLinkDiv(numbers)
 
     //rebuild marker layer
 	rebuildMarkerLayer()
@@ -601,7 +668,7 @@ function filterMarkers(removeMode) {
 
 
 // Create a marker in position with title and possibly spiderfy
-function makeMarker(position, title) {
+function makeMarker(position, title, number) {
 	var marker = L.marker();
 	marker
 		.setLatLng(L.latLng(position[1], position[0]))
@@ -614,6 +681,9 @@ function makeMarker(position, title) {
 				authorGradient(this.attributes['author'].value, "amount")
 			})
 		})
+	if (number) {
+		marker.options['number'] = number
+	}
 	markers.push(marker)
 	oms.addMarker(marker)
 }
@@ -643,10 +713,11 @@ function rebuildMarkerLayer() {
 	markerLayer.addTo(map)
 }
 
-
+var b
 // Given articles put them in the map in respective mscs.
 function displayArticles(allClasses, markers, z) {
 	console.log('display articles')
+
 	z = map.getZoom()
 	cs = ""
     for (var c in allClasses) {
@@ -658,12 +729,23 @@ function displayArticles(allClasses, markers, z) {
 			titles = allClasses[key.replace(/x/g,'')]
 			entry = data[key]
 			for (var title in titles) {
-				makeMarker(entry.position, title);
+				var content = '<h5>' + title + '</h5>' + '<a target="_blank" href="http://zbmath.org/?q=an:' + titles[title] + '">zbMath</a>'
+				makeMarker(entry.position, content, titles[title]);
 			}
 		}
-		// DOES THIS STILL WORK? CHECK WITH INTERNET
 		rebuildMarkerLayer()
 	});
+	var numbers = {}
+	for (var c in allClasses) {
+		for (var title in allClasses[c]) {
+			numbers[allClasses[c][title]] = true
+		}
+	}
+	updatePapersLinkDiv(numbers);
+
+
+	map.addControl(drawControl)
+	map.addControl(filterBtn)
 }
 
 
@@ -673,12 +755,22 @@ function displayArticles(allClasses, markers, z) {
 // If empty don't try anything
 function search(event) {
 	event.preventDefault()
+	if ($('.timeline').hasClass("selected")) {
+		$('.timeline').toggleClass("not-selected").toggleClass("selected")
+	}
+	if ($('.rusin').hasClass("selected")) {
+		$('.rusin').toggleClass("not-selected").toggleClass("selected")
+	}
 
-	// if (geojson) {
-	// 	geojson.clearLayers()
-	// }
+	clearGeoJSON()
 	if (info._map) {
 		info.removeFrom(map)
+	}
+	if (drawControl._map) {
+		drawControl.removeFrom(map)
+	}
+	if (filterBtn._map) {
+		filterBtn.removeFrom(map)
 	}
 
 	var term = $('.msc-search').val();
@@ -699,7 +791,6 @@ function search(event) {
 			formula = term.slice(indexF+2, indexT)
 			text = term.slice(indexT+2)
 		}
-		console.log(formula, text)
 		//WHY IS IT GOING HERE? with: "General"
 		mathsearch(formula, text);
 	} else if (term.slice(0,2) == "a:") {
@@ -725,7 +816,7 @@ function getMscData (e) {
 		var popup = L.popup();
 		popup
 		    .setLatLng(e.latlng)
-		    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a href="' + data.zentralblatt + '">Zentralblatt</a>')
+		    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a target="_blank" href="' + data.zentralblatt + '">Zentralblatt</a>')
 		    .openOn(map);
 	});
 }
@@ -734,13 +825,17 @@ function getMscData (e) {
 function mscsearch(term, composed) {
 	z = map.getZoom()
 	$.getJSON("/search/" + term  + "/" + z + "/1", function(data) {
-		if (!composed) {
-			markers = []
-		}
+		markers = []
 		for(var key in data) {
 			entry = data[key]
-			content = '<h5>' + entry.number + '</h5>' + entry.name + '<br><a href="'+ entry.planetmath + '">PlanetMath</a><br> <a href="' + entry.zentralblatt + '">Zentralblatt</a>'
+			content = '<h5>' + entry.number + '</h5>' + entry.name + '<br><a href="'+ entry.planetmath + '">PlanetMath</a><br> <a target="_blank" href="' + entry.zentralblatt + '">Zentralblatt</a>'
 			makeMarker(entry.position, content);
+		}
+		if (markers.length == 0) {
+			if (!info._map) {
+				info.addTo(map)
+			}
+			info.update("<h4> No results </h4>")
 		}
 		rebuildMarkerLayer()
 	});
@@ -760,6 +855,7 @@ function authorsearch(term, composed) {
 			content = entry.popup
 			makeMarker(entry.largest.position, content)
 		}
+		updateAuthorLinkDiv(data);
 		rebuildMarkerLayer()
 		map.spin(false)
 	}, function(data) {
@@ -831,15 +927,21 @@ function getArticles(data, text) {
 		allClasses = {}
 		if (data1.hits.length == 0) {
 			map.spin(false)
-			console.error('No results with formula search.')
+			
+			if (!info._map) {
+				info.addTo(map)
+			}
+			info.update("<h4> No results </h4>")
 			return;
 		}
 		// Build object containing the title and class of result
 		// Use it to query DB and display articles
 	    for (var key in data1.hits) {
-	    	xhtml = $(jQuery.parseXML(data1.hits[key].xhtml))
+	    	var xhtml = $(jQuery.parseXML(data1.hits[key].xhtml))
+	    	b = xhtml
 	    	classes = xhtml.find(".class").text().split(" ")
 	    	title = xhtml.find(".review > .title").text()
+	    	number = xhtml.find(".number").text()
 	    	for (var i in classes) {
 	    		if (classes[i].indexOf("-") == -1) {
 		    		classes[i] = classes[i].slice(0,3)
@@ -847,7 +949,7 @@ function getArticles(data, text) {
 	    		if (!allClasses[classes[i]]) {
 	    			allClasses[classes[i]] = {}
 	    		}
-	    		allClasses[classes[i]][title] = true
+	    		allClasses[classes[i]][title] = number
 	    	}
 	    }
 
@@ -879,6 +981,7 @@ function convert(formula, text) {
 
 // Given a term find all articles that contain it in abstract, using API
 function mathsearch(formula, text) {
+
 	markers = []
 	map.spin(true);
 	convert(formula, text);
