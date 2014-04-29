@@ -113,11 +113,25 @@ function initmap() {
 			layer = e.layer;
 
 		drawnItems.addLayer(layer);
+		console.log('blaaa')
 
 		if (markers.length) {
 			filterMarkers(false)
 		}
 	});
+
+	map.on('draw:editstart', function(e) {
+		for (var i in markers) {
+			markers[i].setOpacity(1)
+		}
+	})
+
+	map.on('draw:editstop', function(e) {
+
+		if (markers.length) {
+			filterMarkers(false)
+		}
+	})
 
 
 	//filter button
@@ -139,12 +153,23 @@ function initmap() {
 
 		// search control
 		$('.search-form').submit(search)
-		$('.msc-search').val('f: P = NP')
+		// $('.msc-search').val('f: P = NP')
 		$(".search-form").on('mouseover', controlEnter)
 		$(".search-form").on('mouseout', controlLeave);
 
 		$('.search-type').click(function () {
 			updateSearch(this.id)
+		})
+
+		$('.search-selection').click(function () {
+			if ($('.info').is(':visible')){
+				$('.info').hide()
+			} else {
+				$('.info').show()
+			}
+			$(document).click(function() {
+				$('.info').show()
+			}) 
 		})
 	})
 	
@@ -177,7 +202,6 @@ function initmap() {
 		style: style,
 		onEachFeature: onEachFeature
 	}).addTo(map);
-
 
 }
 
@@ -401,8 +425,8 @@ function gradient() {
 		$('.rusin').toggleClass("not-selected").toggleClass("selected")
 	}
 
-	// if there were polygons before remove them and remove info div.
-	clearGeoJSON()
+	clearForGradient()
+	
 	if (info._map) {
 		info.removeFrom(map)
 	}
@@ -481,8 +505,10 @@ function gradient() {
 
 // Genereate gradient for a specific author
 function authorGradient(term, type) {
-	clearGeoJSON()
 
+
+	clearForGradient()
+	
 	map.spin(true)
 	$.getJSON("/searchAuthorTimeline/" + term, function(data) {
 
@@ -559,10 +585,9 @@ function rusinGradient() {
 		$('.timeline').toggleClass("not-selected").toggleClass("selected")
 	}
 
-	// if there were polygons before remove them and remove info div.
-	if (geojson) {
-		geojson.clearLayers()
-	}
+
+	clearForGradient()
+
 	if (info._map) {
 		info.removeFrom(map)
 	}
@@ -605,6 +630,24 @@ function rusinGradient() {
 	});
 }
 
+function clearForGradient() {
+	clearGeoJSON()
+
+
+	if (drawControl._map){
+		drawControl.removeFrom(map)
+	}
+	if (filterBtn._map){
+		filterBtn.removeFrom(map)
+	}
+
+
+	drawnItems.clearLayers()
+
+	for (var i in markers) {
+		markers[i].setOpacity(1)
+	}
+}
 
 
 /********************** FORMULA MARKERS *************************/
@@ -616,9 +659,9 @@ function filterMarkers(removeMode) {
 		removeMode = true
 	} 
 	var polygons = drawnItems._layers
+	console.log(polygons)
     var ms = markerLayer._layers
     if ($.isEmptyObject(polygons)) {
-    	console.error('returning, no polygons')
     	return;
     }
     var numbers = {}
@@ -634,6 +677,7 @@ function filterMarkers(removeMode) {
 	    	radius = polygons[j]._mRadius
 	    	var dist = Math.sqrt(Math.pow(position.x-pos.x,2) + Math.pow(position.y - pos.y,2))
 	    	if (dist < radius) {
+	    		console.log('inside', ms[i])
 	    		check++;
 	    	} 
 	    }
@@ -651,6 +695,9 @@ function filterMarkers(removeMode) {
 		    }
 	    } else {
 	    	numbers[ms[i].options.number] = true
+	    	ms[i].setOpacity(1)
+	    	var k = oms.markers.indexOf(ms[i])
+	    	oms.markers[k].setOpacity(1)
 	    }
     }
 
@@ -667,6 +714,7 @@ function filterMarkers(removeMode) {
 
 
 
+var b 
 // Create a marker in position with title and possibly spiderfy
 function makeMarker(position, title, number) {
 	var marker = L.marker();
@@ -675,9 +723,11 @@ function makeMarker(position, title, number) {
 		.bindPopup(title)
 		.on('click', function () {
 			$('.timeline').click(function (e) {
+				marker.closePopup()
 				authorGradient(this.attributes['author'].value, "time")
 			})
 			$('.classes').click(function (e) {
+				marker.closePopup()
 				authorGradient(this.attributes['author'].value, "amount")
 			})
 		})
@@ -716,7 +766,6 @@ function rebuildMarkerLayer() {
 var b
 // Given articles put them in the map in respective mscs.
 function displayArticles(allClasses, markers, z) {
-	console.log('display articles')
 
 	z = map.getZoom()
 	cs = ""
@@ -824,6 +873,7 @@ function getMscData (e) {
 // Query DB by msc name or number.
 function mscsearch(term, composed) {
 	z = map.getZoom()
+	map.spin(true)
 	$.getJSON("/search/" + term  + "/" + z + "/1", function(data) {
 		markers = []
 		for(var key in data) {
@@ -838,6 +888,9 @@ function mscsearch(term, composed) {
 			info.update("<h4> No results </h4>")
 		}
 		rebuildMarkerLayer()
+		map.spin(false)
+	}, function() {
+		map.spin(false)
 	});
 }
 
@@ -860,6 +913,8 @@ function authorsearch(term, composed) {
 		map.spin(false)
 	}, function(data) {
 		map.spin(false)
+	}, function() {
+		map.spin(false)
 	});
 }
 
@@ -871,25 +926,20 @@ function updateSearch(str) {
 	var term = $('.msc-search').val();
 	var tokens = ["f:","c:", "a:", "t:"]
 	if (term.trim().slice(0,2) == "f:" && prefix == "t") {
-		console.log('bla')
 		$('.msc-search').val(term + " t: ")
 		return
 	} else if (term.trim().slice(0,2) == "t:" && prefix == "f") {
-		console.log("f: t--")
 		$('.msc-search').val(term + " f: ")
 		return
 	} else if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
-		console.log('no f or t adding something')
 		if (term.trim().indexOf("t:") > 0) {
 			term = term.slice(0,term.indexOf("t:"))
 		} else if (term.trim().indexOf("f:") > 0) {
 			term = term.slice(0,term.indexOf("f:"))
 		}
-		console.log(term)
 		$('.msc-search').val(prefix + ": " + term.trim().slice(2).trim())
 		return
 	} else {
-		console.log('no prefix')
 		$('.msc-search').val(prefix + ": " + term.trim())
 	}
 }
@@ -908,7 +958,6 @@ function get_content_mathml(latexml_response) {
 
 // Given a search tearm query API with previously gotten Latex 
 function getArticles(data, text) {
-	// console.log('getARTICLES')
 	result = data.result
 	content = get_content_mathml(result);
 	send = {
@@ -918,7 +967,6 @@ function getArticles(data, text) {
 		"size": 20,
 	}
 	var results = [];
-	console.log(send)
 	$.ajax({
 	   type: 'GET',
 	   url: "http://search.mathweb.org/zbl/php/tema_proxy.php",
@@ -927,7 +975,7 @@ function getArticles(data, text) {
 		allClasses = {}
 		if (data1.hits.length == 0) {
 			map.spin(false)
-			
+
 			if (!info._map) {
 				info.addTo(map)
 			}
@@ -955,13 +1003,12 @@ function getArticles(data, text) {
 
 	    displayArticles(allClasses, markers)
 		
-		//CHECK WITH INTERNET
 		rebuildMarkerLayer()
 		
 
 	}).fail(function(data1){
 		map.spin(false)
-		console.error("BAD"); 
+		console.error(data1); 
 	}); 
 }
 
@@ -971,11 +1018,10 @@ function convert(formula, text) {
 		profile: 'mwsq',
 		tex: formula,
 	}, function (data) {
-		//
 		getArticles(data, text);
-	}).fail(function() {
+	}).fail(function(data) {
 		map.spin(false)
-	    console.error("Unable to query server.");
+	    console.error(data);
 	})
 }
 

@@ -150,6 +150,9 @@ body {
 	.no-padding.col-md-9 {
 		width: 75%;
 	}
+	.left-column {
+		height: 30%;
+	}
 }
 
 
@@ -164,6 +167,11 @@ body {
 }
 
 .left-column {
-  /*margin-bottom: 60px;*/
-  min-height: 100%;
+  margin-bottom: 60px;
+  /*min-height: 100%;*/
+}
+
+.search-form .dropdown-menu {
+	width: 300px;
+	margin-left: -225px;
 }

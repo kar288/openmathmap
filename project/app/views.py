@@ -93,7 +93,7 @@ def searchAuthor(request, term):
 
 	result = {}
 
-	for author in authors:
+	for author in authors[:50]:
 		result[author.name] = {}
 		result[author.name]['yearsum'] = author.yearsum
 		result[author.name]['count'] = author.count
@@ -129,7 +129,6 @@ def searchAuthor(request, term):
 		reqContext = RequestContext(request, {'name': name, 'key': author.name})
 		response_data = template.render(reqContext);
 		result[author.name]['popup'] = response_data
-
 
 	return HttpResponse(json.dumps(result), content_type="application/json");
 
