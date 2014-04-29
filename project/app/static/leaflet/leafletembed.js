@@ -302,11 +302,19 @@ function updateRusinDiv(properties, general) {
 }
 
 function updateAuthorLinkDiv(data) {
+	if ($.isEmptyObject(data)) {
+		if (markers.length == 0) {
+			if (!info._map) {
+				info.addTo(map)
+			}
+			return info.update("<h4> No results </h4>")
+		} else {
+			return
+		}
+	}
+	
 	if (!info._map) {
 		info.addTo(map)
-	}
-	if ($.isEmptyObject(data)) {
-		return info.update("<h4> No results </h4>")
 	}
 	var authorLink = "http://zbmath.org/authors/?s=0&c=100&q="
 	var query = ""
