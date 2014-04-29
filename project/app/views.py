@@ -101,7 +101,7 @@ def searchAuthor(request, term):
 		result[author.name]['largest']['cc'] = 0
 		result[author.name]['largest']['count'] = 0
 
-		for c in author.distribution.split('.')[:-1]:
+		for c in author.distribution.split('|')[:-1]:
 			parts = c[1:].split(':')
 			if len(c[1:]) == 0:
 				continue;
@@ -151,7 +151,7 @@ def searchAuthorTimeline(request, term):
 	result['distribution'] = {}
 
 	ways = set()
-	for c in author.distribution.split('.')[:-1]:
+	for c in author.distribution.split('|')[:-1]:
 		parts = c[1:].split(':')
 		if len(c[1:]) == 0:
 			continue;
