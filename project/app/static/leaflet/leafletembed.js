@@ -113,7 +113,6 @@ function initmap() {
 			layer = e.layer;
 
 		drawnItems.addLayer(layer);
-		console.log('blaaa')
 
 		if (markers.length) {
 			filterMarkers(false)
@@ -159,6 +158,10 @@ function initmap() {
 
 		$('.search-type').click(function () {
 			updateSearch(this.id)
+		})
+
+		$('.search-example').click(function() {
+			$('.msc-search').val(this.text)
 		})
 
 		$('.search-selection').click(function () {
@@ -659,7 +662,6 @@ function filterMarkers(removeMode) {
 		removeMode = true
 	} 
 	var polygons = drawnItems._layers
-	console.log(polygons)
     var ms = markerLayer._layers
     if ($.isEmptyObject(polygons)) {
     	return;
@@ -677,7 +679,6 @@ function filterMarkers(removeMode) {
 	    	radius = polygons[j]._mRadius
 	    	var dist = Math.sqrt(Math.pow(position.x-pos.x,2) + Math.pow(position.y - pos.y,2))
 	    	if (dist < radius) {
-	    		console.log('inside', ms[i])
 	    		check++;
 	    	} 
 	    }
