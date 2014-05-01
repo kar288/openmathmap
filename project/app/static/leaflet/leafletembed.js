@@ -77,6 +77,12 @@ function initmap() {
     map.setView(new L.LatLng(0.5, 0.5), 10);
     map.addLayer(osm);
 
+    //Not let go outside of bounds: 
+    var southWest = L.latLng(-0.2, -0.2),
+    northEast = L.latLng(1.2, 1.2),
+    bounds = L.latLngBounds(southWest, northEast);
+    map.setMaxBounds(bounds)
+
     // Listener to clicks on map
     map.on('click', getMscData);
 
@@ -792,6 +798,11 @@ function displayArticles(allClasses, markers, z) {
 			}
 		}
 		rebuildMarkerLayer()
+
+		if (markers.length > 0) {
+			map.addControl(drawControl)
+			map.addControl(filterBtn)
+		}
 	});
 	var numbers = {}
 	for (var c in allClasses) {
@@ -801,9 +812,6 @@ function displayArticles(allClasses, markers, z) {
 	}
 	updatePapersLinkDiv(numbers);
 
-
-	map.addControl(drawControl)
-	map.addControl(filterBtn)
 }
 
 
@@ -820,6 +828,8 @@ function search(event) {
 		$('.rusin').toggleClass("not-selected").toggleClass("selected")
 	}
 
+	markers = []
+	rebuildMarkerLayer()
 	clearGeoJSON()
 	if (info._map) {
 		info.removeFrom(map)
@@ -864,9 +874,10 @@ function search(event) {
 
 // Pull from database MSC data from given point
 function getMscData (e) {
-	a = e.latlng
-	pos = L.CRS.EPSG900913.project(e.latlng);
-	z = map.getZoom();
+	var a = e.latlng
+	console.log(a)
+	var pos = L.CRS.EPSG900913.project(e.latlng);
+	var z = map.getZoom();
 	$.getJSON("/getMSC/" + pos.x + "/" + pos.y + "/" + z, function(data) {
 		if (data.water) {
 			return;
@@ -935,11 +946,14 @@ function updateSearch(str) {
 	var term = $('.msc-search').val();
 	var tokens = ["f:","c:", "a:", "t:"]
 	if (term.trim().slice(0,2) == "f:" && prefix == "t") {
-		$('.msc-search').val(term + " t: ")
-		return
+
+		if (term.indexOf("t:") == -1) {
+			$('.msc-search').val(term + " t: ")
+		}
 	} else if (term.trim().slice(0,2) == "t:" && prefix == "f") {
-		$('.msc-search').val(term + " f: ")
-		return
+		if (term.indexOf("f:") == -1) {
+			$('.msc-search').val(term + " f: ")
+		}
 	} else if (tokens.indexOf(term.trim().slice(0,2)) > -1) {
 		if (term.trim().indexOf("t:") > 0) {
 			term = term.slice(0,term.indexOf("t:"))
