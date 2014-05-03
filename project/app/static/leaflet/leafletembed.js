@@ -44,6 +44,9 @@ $(document).ready(main);
 var rainbow 
 
 var yearcc = '{"24": {"count": 4, "year": 8006}, "25": {"count": 4, "year": 7995}, "26": {"count": 47464, "year": 94723384}, "27": {"count": 2, "year": 4024}, "20": {"count": 172678, "year": 344217752}, "21": {"count": 0, "year": 0}, "22": {"count": 39899, "year": 79469687}, "23": {"count": 1, "year": 2012}, "28": {"count": 36830, "year": 73377516}, "29": {"count": 1, "year": 2012}, "59": {"count": 1, "year": 2008}, "58": {"count": 66258, "year": 132162747}, "55": {"count": 42172, "year": 83951351}, "54": {"count": 105757, "year": 210682458}, "57": {"count": 70986, "year": 141458375}, "56": {"count": 2, "year": 4022}, "51": {"count": 37722, "year": 75123776}, "50": {"count": 1, "year": 2012}, "53": {"count": 135958, "year": 271198049}, "52": {"count": 32142, "year": 64142725}, "88": {"count": 0, "year": 0}, "89": {"count": 0, "year": 0}, "82": {"count": 77055, "year": 154217918}, "83": {"count": 77632, "year": 155433498}, "80": {"count": 37661, "year": 75300217}, "81": {"count": 166725, "year": 333696746}, "86": {"count": 18637, "year": 37256711}, "87": {"count": 0, "year": 0}, "84": {"count": 0, "year": 0}, "85": {"count": 13070, "year": 26143898}, "02": {"count": 2, "year": 4024}, "03": {"count": 138890, "year": 276902954}, "00": {"count": 60968, "year": 121724194}, "01": {"count": 56398, "year": 112477374}, "06": {"count": 36399, "year": 72531689}, "07": {"count": 3, "year": 6038}, "04": {"count": 2, "year": 4022}, "05": {"count": 188638, "year": 376652278}, "08": {"count": 16766, "year": 33387487}, "09": {"count": 0, "year": 0}, "39": {"count": 29860, "year": 59686931}, "38": {"count": 4, "year": 8032}, "33": {"count": 35443, "year": 70716954}, "32": {"count": 60831, "year": 121235628}, "31": {"count": 19054, "year": 37942450}, "30": {"count": 86421, "year": 172133014}, "37": {"count": 127912, "year": 255812858}, "36": {"count": 3, "year": 6035}, "35": {"count": 458418, "year": 915157473}, "34": {"count": 231487, "year": 461926475}, "60": {"count": 242328, "year": 483092062}, "61": {"count": 1, "year": 1949}, "62": {"count": 316570, "year": 631803583}, "63": {"count": 1, "year": 2011}, "64": {"count": 3, "year": 6026}, "65": {"count": 349638, "year": 697777596}, "66": {"count": 1, "year": 2012}, "67": {"count": 1, "year": 2011}, "68": {"count": 439399, "year": 878137809}, "69": {"count": 1, "year": 2012}, "99": {"count": 2, "year": 4024}, "98": {"count": 2, "year": 4019}, "91": {"count": 153534, "year": 306854922}, "90": {"count": 252970, "year": 505143524}, "93": {"count": 263884, "year": 526234376}, "92": {"count": 93161, "year": 186293780}, "95": {"count": 0, "year": 0}, "94": {"count": 97100, "year": 193879575}, "97": {"count": 4877, "year": 9789687}, "96": {"count": 1, "year": 2012}, "11": {"count": 180371, "year": 359719774}, "10": {"count": 4, "year": 8047}, "13": {"count": 51058, "year": 101796618}, "12": {"count": 19036, "year": 37924782}, "15": {"count": 68413, "year": 136516621}, "14": {"count": 116612, "year": 232713969}, "17": {"count": 48759, "year": 97289336}, "16": {"count": 103666, "year": 206749106}, "19": {"count": 6645, "year": 13299808}, "18": {"count": 32248, "year": 64252638}, "48": {"count": 3, "year": 6034}, "49": {"count": 90060, "year": 179606630}, "46": {"count": 161823, "year": 322334662}, "47": {"count": 175691, "year": 350528023}, "44": {"count": 14249, "year": 28370602}, "45": {"count": 43176, "year": 86002918}, "42": {"count": 54716, "year": 109142111}, "43": {"count": 19415, "year": 38654627}, "40": {"count": 14459, "year": 28779632}, "41": {"count": 67688, "year": 134795758}, "77": {"count": 2, "year": 4018}, "76": {"count": 303356, "year": 605396632}, "75": {"count": 12, "year": 24114}, "74": {"count": 306286, "year": 610627476}, "73": {"count": 98, "year": 194601}, "72": {"count": 0, "year": 0}, "71": {"count": 0, "year": 0}, "70": {"count": 77070, "year": 153655201}, "79": {"count": 2, "year": 4008}, "78": {"count": 35066, "year": 70180604}}'
+var smallestyearcc = '{"24": {"year": 2012}, "25": {"year": 2012}, "26": {"year": 2013}, "27": {"year": 2012}, "20": {"year": 2014}, "21": {"year": 0}, "22": {"year": 2013}, "23": {"year": 2012}, "28": {"year": 2013}, "29": {"year": 2012}, "59": {"year": 2008}, "58": {"year": 2013}, "55": {"year": 2013}, "54": {"year": 2013}, "57": {"year": 2013}, "56": {"year": 2011}, "51": {"year": 2013}, "50": {"year": 2012}, "53": {"year": 2013}, "52": {"year": 2013}, "88": {"year": 0}, "89": {"year": 0}, "82": {"year": 2013}, "83": {"year": 2013}, "80": {"year": 2013}, "81": {"year": 2014}, "86": {"year": 2013}, "87": {"year": 0}, "84": {"year": 0}, "85": {"year": 2013}, "02": {"year": 2012}, "03": {"year": 2013}, "00": {"year": 2014}, "01": {"year": 2013}, "06": {"year": 2013}, "07": {"year": 2013}, "04": {"year": 2012}, "05": {"year": 2013}, "08": {"year": 2013}, "09": {"year": 0}, "39": {"year": 2013}, "38": {"year": 2012}, "33": {"year": 2013}, "32": {"year": 2013}, "31": {"year": 2013}, "30": {"year": 2013}, "37": {"year": 2013}, "36": {"year": 2012}, "35": {"year": 2013}, "34": {"year": 2013}, "60": {"year": 2014}, "61": {"year": 1949}, "62": {"year": 2013}, "63": {"year": 2011}, "64": {"year": 2012}, "65": {"year": 2014}, "66": {"year": 2012}, "67": {"year": 2011}, "68": {"year": 2014}, "69": {"year": 2012}, "99": {"year": 2012}, "98": {"year": 2012}, "91": {"year": 2013}, "90": {"year": 2014}, "93": {"year": 2013}, "92": {"year": 2013}, "95": {"year": 0}, "94": {"year": 2013}, "97": {"year": 2013}, "96": {"year": 2012}, "11": {"year": 2014}, "10": {"year": 2012}, "13": {"year": 2014}, "12": {"year": 2014}, "15": {"year": 2014}, "14": {"year": 2013}, "17": {"year": 2013}, "16": {"year": 2013}, "19": {"year": 2013}, "18": {"year": 2013}, "48": {"year": 2012}, "49": {"year": 2013}, "46": {"year": 2013}, "47": {"year": 2013}, "44": {"year": 2013}, "45": {"year": 2013}, "42": {"year": 2013}, "43": {"year": 2013}, "40": {"year": 2013}, "41": {"year": 2013}, "77": {"year": 2010}, "76": {"year": 2013}, "75": {"year": 2013}, "74": {"year": 2014}, "73": {"year": 2012}, "72": {"year": 0}, "71": {"year": 0}, "70": {"year": 2013}, "79": {"year": 2010}, "78": {"year": 2013}}'
+var last = '{"24": {"count": 4, "last": 3}, "25": {"count": 4, "last": 2}, "26": {"count": 47464, "last": 5580}, "27": {"count": 2, "last": 2}, "20": {"count": 172678, "last": 14384}, "21": {"count": 0, "last": 0}, "22": {"count": 39899, "last": 2988}, "23": {"count": 1, "last": 1}, "28": {"count": 36830, "last": 2629}, "29": {"count": 1, "last": 1}, "59": {"count": 1, "last": 0}, "58": {"count": 66258, "last": 5072}, "55": {"count": 42172, "last": 2740}, "54": {"count": 105757, "last": 8586}, "57": {"count": 70986, "last": 5663}, "56": {"count": 2, "last": 2}, "51": {"count": 37722, "last": 2340}, "50": {"count": 1, "last": 1}, "53": {"count": 135958, "last": 13483}, "52": {"count": 32142, "last": 3095}, "88": {"count": 0, "last": 0}, "89": {"count": 0, "last": 0}, "82": {"count": 77055, "last": 11184}, "83": {"count": 77632, "last": 15082}, "80": {"count": 37661, "last": 4370}, "81": {"count": 166725, "last": 25074}, "86": {"count": 18637, "last": 1644}, "87": {"count": 0, "last": 0}, "84": {"count": 0, "last": 0}, "85": {"count": 13070, "last": 2662}, "02": {"count": 2, "last": 2}, "03": {"count": 138890, "last": 11095}, "00": {"count": 60968, "last": 7353}, "01": {"count": 56398, "last": 4362}, "06": {"count": 36399, "last": 2889}, "07": {"count": 3, "last": 3}, "04": {"count": 2, "last": 2}, "05": {"count": 188638, "last": 25950}, "08": {"count": 16766, "last": 961}, "09": {"count": 0, "last": 0}, "39": {"count": 29860, "last": 4234}, "38": {"count": 4, "last": 2}, "33": {"count": 35443, "last": 3737}, "32": {"count": 60831, "last": 4663}, "31": {"count": 19054, "last": 1189}, "30": {"count": 86421, "last": 6993}, "37": {"count": 127912, "last": 14847}, "36": {"count": 3, "last": 3}, "35": {"count": 458418, "last": 54917}, "34": {"count": 231487, "last": 25666}, "60": {"count": 242328, "last": 21107}, "61": {"count": 1, "last": 0}, "62": {"count": 316570, "last": 32136}, "63": {"count": 1, "last": 1}, "64": {"count": 3, "last": 2}, "65": {"count": 349638, "last": 37324}, "66": {"count": 1, "last": 1}, "67": {"count": 1, "last": 1}, "68": {"count": 439399, "last": 43479}, "69": {"count": 1, "last": 1}, "99": {"count": 2, "last": 2}, "98": {"count": 2, "last": 1}, "91": {"count": 153534, "last": 21017}, "90": {"count": 252970, "last": 28485}, "93": {"count": 263884, "last": 22210}, "92": {"count": 93161, "last": 12943}, "95": {"count": 0, "last": 0}, "94": {"count": 97100, "last": 10705}, "97": {"count": 4877, "last": 2133}, "96": {"count": 1, "last": 1}, "11": {"count": 180371, "last": 18026}, "10": {"count": 4, "last": 4}, "13": {"count": 51058, "last": 4686}, "12": {"count": 19036, "last": 1354}, "15": {"count": 68413, "last": 7886}, "14": {"count": 116612, "last": 11784}, "17": {"count": 48759, "last": 4412}, "16": {"count": 103666, "last": 9442}, "19": {"count": 6645, "last": 941}, "18": {"count": 32248, "last": 3083}, "48": {"count": 3, "last": 3}, "49": {"count": 90060, "last": 8314}, "46": {"count": 161823, "last": 11235}, "47": {"count": 175691, "last": 18370}, "44": {"count": 14249, "last": 1020}, "45": {"count": 43176, "last": 3449}, "42": {"count": 54716, "last": 5644}, "43": {"count": 19415, "last": 1272}, "40": {"count": 14459, "last": 1230}, "41": {"count": 67688, "last": 4057}, "77": {"count": 2, "last": 1}, "76": {"count": 303356, "last": 22741}, "75": {"count": 12, "last": 7}, "74": {"count": 306286, "last": 13974}, "73": {"count": 98, "last": 10}, "72": {"count": 0, "last": 0}, "71": {"count": 0, "last": 0}, "70": {"count": 77070, "last": 4868}, "79": {"count": 2, "last": 1}, "78": {"count": 35066, "last": 5212}}'
+
 
 var geojson;
 
@@ -109,7 +112,7 @@ function initmap() {
 	    position: "topleft"
 	});
 
-	L.drawLocal.draw.toolbar.buttons.circle = 'Select markers.';
+	L.drawLocal.draw.toolbar.buttons.circle = 'Select markers to filter.';
 
 	L.drawLocal.draw.handlers.circle.tooltip.start += "<br> Select the markers you want to keep.";
 	// map.addControl(drawControl);
@@ -123,6 +126,8 @@ function initmap() {
 		if (markers.length) {
 			filterMarkers(false)
 		}
+
+		$('.confirm').parent().removeClass('leaflet-disabled')
 	});
 
 	map.on('draw:editstart', function(e) {
@@ -140,9 +145,8 @@ function initmap() {
 
 
 	//filter button
-	filterBtn = L.functionButtons([{ content: '<div class="map-button"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topleft', title: 'Select Markers'}]);
+	filterBtn = L.functionButtons([{ content: '<div class="map-button confirm"><span class="glyphicon glyphicon-ok-circle"></span></div>' , position: 'topleft', title: 'Confirm'}]);
 	filterBtn.on('clicked', filterMarkers);
-	// map.addControl(filterBtn);
 
 	// Create search form
 	// Initialize proper event handlers
@@ -168,6 +172,7 @@ function initmap() {
 
 		$('.search-example').click(function() {
 			$('.msc-search').val(this.text)
+			$('.msc-search').focus()
 		})
 
 		$('.search-selection').click(function () {
@@ -184,7 +189,7 @@ function initmap() {
 	
 
 	//rusin button
-	rusinBtn = L.functionButtons([{ content: '<div class="rusin map-button not-selected text-button">General Categories</div>' , position: 'bottomleft', title: 'Gradient'}]);
+	rusinBtn = L.functionButtons([{ content: '<div class="rusin map-button not-selected text-button">Rusin Categories</div>' , position: 'bottomleft', title: 'Gradient'}]);
 	rusinBtn.on('clicked', rusinGradient);
 	map.addControl(rusinBtn);
 
@@ -269,10 +274,18 @@ function updateGradientDiv(properties, general) {
 	} else {
 		if (general) {
 			innerHTML = "<h4> Average publication year per MSC</h4>"
+			if (properties.last) {
+				innerHTML = "<h4> Percent of publications in last 5 years</h4>"
+			}
 		} else {
 			innerHTML = "<h4>" + properties.className + "</h4>"
 			innerHTML += "<span>" + Math.round(properties.count/1000) + "k publications.</span><br>"
-			innerHTML += "<span> Average year: " + properties.year + "</span>"
+			
+			if (properties.last) {
+				innerHTML += "<span> " + properties.last + "% of papers published in the last 5 years.</span>"
+			} else {
+				innerHTML += "<span> Average year: " + properties.year + "</span>"
+			}
 			return info.update(innerHTML)
 		}
 	}
@@ -313,7 +326,9 @@ function updateAuthorLinkDiv(data) {
 			if (!info._map) {
 				info.addTo(map)
 			}
-			return info.update("<h4> No results </h4>")
+			if (markers.length == 0) {
+				return info.update("<h4> No results </h4>")
+			}
 		} else {
 			return
 		}
@@ -339,7 +354,7 @@ function updatePapersLinkDiv(numbers) {
 	if (!info._map) {
 		info.addTo(map)
 	}
-	if ($.isEmptyObject(numbers)) {
+	if ($.isEmptyObject(numbers) && markers.length == 0) {
 		return info.update("<h4> No results </h4>")
 	}
 	var paperLink = "http://zbmath.org/?q=" //"an:"
@@ -469,16 +484,20 @@ function gradient() {
 		//used to stretch out data between 0-100
 		var max = 0
 		var min = Number.POSITIVE_INFINITY
-
+		var values = []
 		for (var i in data) {
 			num = i.slice(0,2)
 	   		if (!information[num]) {
 	   			continue;
 	   		}
 	   		amount = information[num].year/information[num].count
-	   		min = Math.min(min, amount)
-	   		max = Math.max(max, amount)
+			values.push(Math.round(amount))
 		}
+
+		values = values.sort(sortNumber)
+		min = values[0]
+		max = values[values.length - 2]
+
 
 		// for each class calculate its average year of publication
 		// stretch them between 0 and 100 to get a color code for rainbow
@@ -514,11 +533,187 @@ function gradient() {
 		updateGradientDiv(geojson.getLayers()[0].feature.properties, true);
 
 		map.spin(false)
-	}, function(data) {
+	}).error(function() {
 		map.spin(false)
 	});
 }
 
+function sortNumber(a,b) {
+    return a - b;
+}
+
+// Average year of publications for all classes
+function lastgradient() {
+	// show button status
+	$('.timeline').toggleClass("not-selected").toggleClass("selected")
+
+	if ($('.rusin').hasClass("selected")) {
+		$('.rusin').toggleClass("not-selected").toggleClass("selected")
+	}
+
+	clearForGradient()
+	
+	if (info._map) {
+		info.removeFrom(map)
+	}
+	if ($('.timeline').hasClass('not-selected')) {
+		return
+	}
+
+	// retrieve information
+	var information = JSON.parse(last)
+
+	// Sum up all publications
+	var total = 0;
+	for (var i in information) {
+		total += information[i].count
+	}
+
+	map.spin(true)
+
+	// Retrieve geometry of all classes
+	$.getJSON("/getWay/,/1/", function(data) {
+
+		//Get min and max of publication year
+		//used to stretch out data between 0-100
+		var max = 0
+		var min = Number.POSITIVE_INFINITY
+		var values = []
+		for (var i in data) {
+			num = i.slice(0,2)
+	   		if (!information[num]) {
+	   			continue;
+	   		}
+	   		var amount = information[num].last*100/information[num].count
+	   		values.push(Math.round(amount))
+		}
+		values = values.sort(sortNumber)
+		min = values[0]
+		max = values[values.length - 2]
+
+		// for each class calculate its average year of publication
+		// stretch them between 0 and 100 to get a color code for rainbow
+	    for (var i in data) {
+	   		color = ""
+	   		num = i.slice(0,2)
+	   		if (!information[num]) {
+	   			continue;
+	   		}
+	   		amount = information[num].last*100/information[num].count
+	   		if (min != max) {
+				amount = (amount - min)*100/(max- min)
+			}
+
+			l = JSON.parse(data[i].way).coordinates[0]
+
+			// set properties for the polygon and to display info
+			properties = {}
+			properties.count = information[num].count
+			// properties.year = Math.round(information[num].year/information[num].count)
+			properties.min = min
+			properties.max = max
+			properties.colorCode = amount + 1
+			properties.last = Math.round(information[num].last*100/information[num].count)
+			properties.term = ""
+			properties.class = i
+			properties.className = data[i].name
+			makePolygon(l, properties)
+		}
+
+		// Add the information div to the map to display
+		info.addTo(map)
+
+		updateGradientDiv(geojson.getLayers()[0].feature.properties, true);
+
+		map.spin(false)
+	}).error(function() {
+		map.spin(false)
+	});
+}
+
+
+// Average year of publications for all classes
+function smallestgradient() {
+	// show button status
+	$('.timeline').toggleClass("not-selected").toggleClass("selected")
+
+	if ($('.rusin').hasClass("selected")) {
+		$('.rusin').toggleClass("not-selected").toggleClass("selected")
+	}
+
+	clearForGradient()
+	
+	if (info._map) {
+		info.removeFrom(map)
+	}
+	if ($('.timeline').hasClass('not-selected')) {
+		return
+	}
+
+	// retrieve information
+	var information = JSON.parse(smallestyearcc)
+
+	map.spin(true)
+
+	// Retrieve geometry of all classes
+	$.getJSON("/getWay/,/1/", function(data) {
+
+		//Get min and max of publication year
+		//used to stretch out data between 0-100
+		var max = 0
+		var min = Number.POSITIVE_INFINITY
+		var values = []
+
+		for (var i in data) {
+			num = i.slice(0,2)
+	   		if (!information[num]) {
+	   			continue;
+	   		}
+	   		amount = information[num].year
+	   		values.push(Math.round(amount))
+		}
+		values = values.sort(sortNumber)
+		min = values[0]
+		max = values[values.length - 1]
+
+		// for each class calculate its average year of publication
+		// stretch them between 0 and 100 to get a color code for rainbow
+	    for (var i in data) {
+	   		color = ""
+	   		num = i.slice(0,2)
+	   		if (!information[num]) {
+	   			continue;
+	   		}
+	   		amount = information[num].year
+	   		if (min != max) {
+				amount = (amount - min)*100/(max- min)
+			}
+
+			l = JSON.parse(data[i].way).coordinates[0]
+
+			// set properties for the polygon and to display info
+			properties = {}
+			// properties.count = information[num].count
+			properties.year = Math.round(information[num].year)
+			properties.min = min
+			properties.max = max
+			properties.colorCode = amount + 1
+			properties.term = ""
+			properties.class = i
+			properties.className = data[i].name
+			makePolygon(l, properties)
+		}
+
+		// Add the information div to the map to display
+		info.addTo(map)
+
+		updateGradientDiv(geojson.getLayers()[0].feature.properties, true);
+
+		map.spin(false)
+	}).error(function() {
+		map.spin(false)
+	});
+}
 
 // Genereate gradient for a specific author
 function authorGradient(term, type) {
@@ -528,6 +723,11 @@ function authorGradient(term, type) {
 	
 	map.spin(true)
 	$.getJSON("/searchAuthorTimeline/" + term, function(data) {
+		if ($.isEmptyObject(data.distribution)) {
+			map.spin(false)
+			alert("There is no publication infromation for this author.")
+			return;
+		}
 
 		max = 0.0
 		min = Number.POSITIVE_INFINITY
@@ -590,6 +790,8 @@ function authorGradient(term, type) {
 		map.spin(false)
 		
 		
+	}).error(function() {
+		map.spin(false)
 	});
 }
 
@@ -642,7 +844,7 @@ function rusinGradient() {
 		map.spin(false)
 
 		
-	}, function(data) {
+	}).error(function() {
 		map.spin(false)
 	});
 }
@@ -672,6 +874,8 @@ function clearForGradient() {
 // For each marker check if it is inside of a user created polygon
 // If it is not inside of any then remove it.
 function filterMarkers(removeMode) {
+
+	$('.confirm').parent().addClass('leaflet-disabled')
 	if (typeof removeMode == 'undefined') {
 		removeMode = true
 	} 
@@ -732,6 +936,7 @@ function filterMarkers(removeMode) {
 var b 
 // Create a marker in position with title and possibly spiderfy
 function makeMarker(position, title, number) {
+	// console.log(position)
 	var marker = L.marker();
 	marker
 		.setLatLng(L.latLng(position[1], position[0]))
@@ -794,16 +999,39 @@ function displayArticles(allClasses, markers, z) {
 			entry = data[key]
 			for (var title in titles) {
 				var content = '<h5>' + title + '</h5>' + '<a target="_blank" href="http://zbmath.org/?q=an:' + titles[title] + '">zbMath</a>'
-				makeMarker(entry.position, content, titles[title]);
+				if (entry.position) {
+					makeMarker(entry.position, content, titles[title]);
+				}
 			}
 		}
 		rebuildMarkerLayer()
 
-		if (markers.length > 0) {
+		if (markers.length > 0 && !drawControl._map) {
 			map.addControl(drawControl)
+			$(".leaflet-draw-toolbar-top").popover({
+		        placement: 'right',
+		        html: 'true',
+		        content : '<div style="text-align: right"><a class="close-popup" href="#" >&times;</a></div><div>Click here to filter your results!</div>'
+		    })
+		    $(".leaflet-draw-toolbar-top").popover('show');
+		    $('.popover').width('100px')
+		    $('.close-popup').click(function () { 
+		    	$(".leaflet-draw-toolbar-top").popover('destroy');
+		    })
 			map.addControl(filterBtn)
+			$('.confirm').parent().addClass('leaflet-disabled')
 		}
-	});
+	}).error(function() {
+		map.spin(false)
+		if (!info._map) {
+			info.addTo(map)
+		}
+		
+		if (markers.length == 0) {
+			info.update("<h4> No results </h4>")
+		}
+	})
+
 	var numbers = {}
 	for (var c in allClasses) {
 		for (var title in allClasses[c]) {
@@ -868,6 +1096,8 @@ function search(event) {
 		markers = []
 		mscsearch(term, true);
 		authorsearch(term, true);
+		mathsearch(term, "", true);
+		mathsearch("", term, true);
 	}
 }
 
@@ -875,7 +1105,6 @@ function search(event) {
 // Pull from database MSC data from given point
 function getMscData (e) {
 	var a = e.latlng
-	console.log(a)
 	var pos = L.CRS.EPSG900913.project(e.latlng);
 	var z = map.getZoom();
 	$.getJSON("/getMSC/" + pos.x + "/" + pos.y + "/" + z, function(data) {
@@ -887,6 +1116,15 @@ function getMscData (e) {
 		    .setLatLng(e.latlng)
 		    .setContent('<h5>' + data.number + '</h5>' + data.name + '<br><a href="'+ data.planetmath + '">PlanetMath</a><br> <a target="_blank" href="' + data.zentralblatt + '">Zentralblatt</a>')
 		    .openOn(map);
+	}).error(function() {
+		map.spin(false)
+		if (!info._map) {
+			info.addTo(map)
+		}
+		
+		if (markers.length == 0) {
+			info.update("<h4> No results </h4>")
+		}
 	});
 }
 
@@ -899,7 +1137,9 @@ function mscsearch(term, composed) {
 		for(var key in data) {
 			entry = data[key]
 			content = '<h5>' + entry.number + '</h5>' + entry.name + '<br><a href="'+ entry.planetmath + '">PlanetMath</a><br> <a target="_blank" href="' + entry.zentralblatt + '">Zentralblatt</a>'
-			makeMarker(entry.position, content);
+			if (entry.position) {
+				makeMarker(entry.position, content);
+			}
 		}
 		if (markers.length == 0) {
 			if (!info._map) {
@@ -909,9 +1149,16 @@ function mscsearch(term, composed) {
 		}
 		rebuildMarkerLayer()
 		map.spin(false)
-	}, function() {
+	}).error(function() {
 		map.spin(false)
-	});
+		if (!info._map) {
+			info.addTo(map)
+		}
+		
+		if (markers.length == 0) {
+			info.update("<h4> No results </h4>")
+		}
+	})
 }
 
 // Search authors in the db
@@ -923,19 +1170,25 @@ function authorsearch(term, composed) {
 		}
 		for (var key in data) {
 			var entry = data[key]
-			var spacey = key.replace('.', ' ')
+			var spacey = key.replace('.', ' ').trim()
 			var name = L.Util.splitWords(spacey)
 			content = entry.popup
-			makeMarker(entry.largest.position, content)
+			if (entry.largest.position) {
+				makeMarker(entry.largest.position, content)
+			}
 		}
 		updateAuthorLinkDiv(data);
 		rebuildMarkerLayer()
 		map.spin(false)
-	}, function(data) {
+	}).error(function() {
 		map.spin(false)
-	}, function() {
-		map.spin(false)
-	});
+		if (!info._map) {
+			info.addTo(map)
+		}
+		if (markers.length == 0) {
+			info.update("<h4> No results </h4>")
+		}
+	})
 }
 
 
@@ -965,6 +1218,7 @@ function updateSearch(str) {
 	} else {
 		$('.msc-search').val(prefix + ": " + term.trim())
 	}
+	$('.msc-search').focus()
 }
 
 // Parse response just to get content
@@ -1002,7 +1256,9 @@ function getArticles(data, text) {
 			if (!info._map) {
 				info.addTo(map)
 			}
-			info.update("<h4> No results </h4>")
+			if (markers.length == 0) {
+				info.update("<h4> No results </h4>")
+			}
 			return;
 		}
 		// Build object containing the title and class of result
