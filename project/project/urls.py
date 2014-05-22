@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 # from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import settings
 
 # dajaxice_autodiscover()
 # Uncomment the next two lines to enable the admin:
@@ -19,6 +20,7 @@ urlpatterns = patterns('',
 	url(r'^searchAuthor/(?P<term>[\w|\W]+)/$', 'app.views.searchAuthor', name='searchAuthor'),
 	url(r'^searchAuthorTimeline/(?P<term>[\w|\W]+)/$', 'app.views.searchAuthorTimeline', name='searchAuthorTimeline'),
 	url(r'^getRusinClasses$', 'app.views.getRusinClasses', name='getRusinClasses'),
+	url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 )
 
 urlpatterns += staticfiles_urlpatterns()
