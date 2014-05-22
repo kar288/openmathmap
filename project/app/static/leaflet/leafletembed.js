@@ -47,6 +47,7 @@ var yearcc = '{"24": {"count": 4, "year": 8006}, "25": {"count": 4, "year": 7995
 var smallestyearcc = '{"24": {"year": 2012}, "25": {"year": 2012}, "26": {"year": 2013}, "27": {"year": 2012}, "20": {"year": 2014}, "21": {"year": 0}, "22": {"year": 2013}, "23": {"year": 2012}, "28": {"year": 2013}, "29": {"year": 2012}, "59": {"year": 2008}, "58": {"year": 2013}, "55": {"year": 2013}, "54": {"year": 2013}, "57": {"year": 2013}, "56": {"year": 2011}, "51": {"year": 2013}, "50": {"year": 2012}, "53": {"year": 2013}, "52": {"year": 2013}, "88": {"year": 0}, "89": {"year": 0}, "82": {"year": 2013}, "83": {"year": 2013}, "80": {"year": 2013}, "81": {"year": 2014}, "86": {"year": 2013}, "87": {"year": 0}, "84": {"year": 0}, "85": {"year": 2013}, "02": {"year": 2012}, "03": {"year": 2013}, "00": {"year": 2014}, "01": {"year": 2013}, "06": {"year": 2013}, "07": {"year": 2013}, "04": {"year": 2012}, "05": {"year": 2013}, "08": {"year": 2013}, "09": {"year": 0}, "39": {"year": 2013}, "38": {"year": 2012}, "33": {"year": 2013}, "32": {"year": 2013}, "31": {"year": 2013}, "30": {"year": 2013}, "37": {"year": 2013}, "36": {"year": 2012}, "35": {"year": 2013}, "34": {"year": 2013}, "60": {"year": 2014}, "61": {"year": 1949}, "62": {"year": 2013}, "63": {"year": 2011}, "64": {"year": 2012}, "65": {"year": 2014}, "66": {"year": 2012}, "67": {"year": 2011}, "68": {"year": 2014}, "69": {"year": 2012}, "99": {"year": 2012}, "98": {"year": 2012}, "91": {"year": 2013}, "90": {"year": 2014}, "93": {"year": 2013}, "92": {"year": 2013}, "95": {"year": 0}, "94": {"year": 2013}, "97": {"year": 2013}, "96": {"year": 2012}, "11": {"year": 2014}, "10": {"year": 2012}, "13": {"year": 2014}, "12": {"year": 2014}, "15": {"year": 2014}, "14": {"year": 2013}, "17": {"year": 2013}, "16": {"year": 2013}, "19": {"year": 2013}, "18": {"year": 2013}, "48": {"year": 2012}, "49": {"year": 2013}, "46": {"year": 2013}, "47": {"year": 2013}, "44": {"year": 2013}, "45": {"year": 2013}, "42": {"year": 2013}, "43": {"year": 2013}, "40": {"year": 2013}, "41": {"year": 2013}, "77": {"year": 2010}, "76": {"year": 2013}, "75": {"year": 2013}, "74": {"year": 2014}, "73": {"year": 2012}, "72": {"year": 0}, "71": {"year": 0}, "70": {"year": 2013}, "79": {"year": 2010}, "78": {"year": 2013}}'
 var last = '{"24": {"count": 4, "last": 3}, "25": {"count": 4, "last": 2}, "26": {"count": 47464, "last": 5580}, "27": {"count": 2, "last": 2}, "20": {"count": 172678, "last": 14384}, "21": {"count": 0, "last": 0}, "22": {"count": 39899, "last": 2988}, "23": {"count": 1, "last": 1}, "28": {"count": 36830, "last": 2629}, "29": {"count": 1, "last": 1}, "59": {"count": 1, "last": 0}, "58": {"count": 66258, "last": 5072}, "55": {"count": 42172, "last": 2740}, "54": {"count": 105757, "last": 8586}, "57": {"count": 70986, "last": 5663}, "56": {"count": 2, "last": 2}, "51": {"count": 37722, "last": 2340}, "50": {"count": 1, "last": 1}, "53": {"count": 135958, "last": 13483}, "52": {"count": 32142, "last": 3095}, "88": {"count": 0, "last": 0}, "89": {"count": 0, "last": 0}, "82": {"count": 77055, "last": 11184}, "83": {"count": 77632, "last": 15082}, "80": {"count": 37661, "last": 4370}, "81": {"count": 166725, "last": 25074}, "86": {"count": 18637, "last": 1644}, "87": {"count": 0, "last": 0}, "84": {"count": 0, "last": 0}, "85": {"count": 13070, "last": 2662}, "02": {"count": 2, "last": 2}, "03": {"count": 138890, "last": 11095}, "00": {"count": 60968, "last": 7353}, "01": {"count": 56398, "last": 4362}, "06": {"count": 36399, "last": 2889}, "07": {"count": 3, "last": 3}, "04": {"count": 2, "last": 2}, "05": {"count": 188638, "last": 25950}, "08": {"count": 16766, "last": 961}, "09": {"count": 0, "last": 0}, "39": {"count": 29860, "last": 4234}, "38": {"count": 4, "last": 2}, "33": {"count": 35443, "last": 3737}, "32": {"count": 60831, "last": 4663}, "31": {"count": 19054, "last": 1189}, "30": {"count": 86421, "last": 6993}, "37": {"count": 127912, "last": 14847}, "36": {"count": 3, "last": 3}, "35": {"count": 458418, "last": 54917}, "34": {"count": 231487, "last": 25666}, "60": {"count": 242328, "last": 21107}, "61": {"count": 1, "last": 0}, "62": {"count": 316570, "last": 32136}, "63": {"count": 1, "last": 1}, "64": {"count": 3, "last": 2}, "65": {"count": 349638, "last": 37324}, "66": {"count": 1, "last": 1}, "67": {"count": 1, "last": 1}, "68": {"count": 439399, "last": 43479}, "69": {"count": 1, "last": 1}, "99": {"count": 2, "last": 2}, "98": {"count": 2, "last": 1}, "91": {"count": 153534, "last": 21017}, "90": {"count": 252970, "last": 28485}, "93": {"count": 263884, "last": 22210}, "92": {"count": 93161, "last": 12943}, "95": {"count": 0, "last": 0}, "94": {"count": 97100, "last": 10705}, "97": {"count": 4877, "last": 2133}, "96": {"count": 1, "last": 1}, "11": {"count": 180371, "last": 18026}, "10": {"count": 4, "last": 4}, "13": {"count": 51058, "last": 4686}, "12": {"count": 19036, "last": 1354}, "15": {"count": 68413, "last": 7886}, "14": {"count": 116612, "last": 11784}, "17": {"count": 48759, "last": 4412}, "16": {"count": 103666, "last": 9442}, "19": {"count": 6645, "last": 941}, "18": {"count": 32248, "last": 3083}, "48": {"count": 3, "last": 3}, "49": {"count": 90060, "last": 8314}, "46": {"count": 161823, "last": 11235}, "47": {"count": 175691, "last": 18370}, "44": {"count": 14249, "last": 1020}, "45": {"count": 43176, "last": 3449}, "42": {"count": 54716, "last": 5644}, "43": {"count": 19415, "last": 1272}, "40": {"count": 14459, "last": 1230}, "41": {"count": 67688, "last": 4057}, "77": {"count": 2, "last": 1}, "76": {"count": 303356, "last": 22741}, "75": {"count": 12, "last": 7}, "74": {"count": 306286, "last": 13974}, "73": {"count": 98, "last": 10}, "72": {"count": 0, "last": 0}, "71": {"count": 0, "last": 0}, "70": {"count": 77070, "last": 4868}, "79": {"count": 2, "last": 1}, "78": {"count": 35066, "last": 5212}}'
 
+var allClasses_backup = '{"90":{"Bin packing in multiple dimensions: inapproximability results and approximation schemes.":"5279658"},"68Q":{"On polynomial-time truth-table reduciblity of intractable sets to p- selective sets.":"0722.68059","Real number models under various sets of operations.":"0782.68048","Real number computations: On the use of information.":"0814.68059","On the computational complexity of best Chebyshev approximations.":"0617.03039","Best possible heuristics for the bottleneck wandering salesperson and bottleneck vehicle routing problem.":"0596.90093","Une nouvelle approche du problème SAT. (A new approach to the SAT problem).":"0738.03006","On p-creative sets and p-completely creative sets.":"0756.68044","A best possible heuristic for the k-center problem.":"0565.90015","Approximating the minimum maximal independence number.":"0778.68041","Some consequences of non-uniform conditions on uniform classes.":"0541.68017"},"90C":{"Order consolidation for batch processing.":"1066.90106","Breaks, cuts, and patterns.":"1235.90061","Parallel machines scheduling with machine maintenance for minsum criteria.":"1237.90099","Best possible heuristics for the bottleneck wandering salesperson and bottleneck vehicle routing problem.":"0596.90093","Scheduling resumable deteriorating jobs on a single machine with non-availability constraints.":"1207.90054","Approximation algorithms for extensible bin packing.":"1012.90049"},"90B":{"Order consolidation for batch processing.":"1066.90106","Breaks, cuts, and patterns.":"1235.90061","Parallel machines scheduling with machine maintenance for minsum criteria.":"1237.90099","A best possible heuristic for the k-center problem.":"0565.90015","Scheduling resumable deteriorating jobs on a single machine with non-availability constraints.":"1207.90054"},"03D":{"Real number computations: On the use of information.":"0814.68059","On the computational complexity of best Chebyshev approximations.":"0617.03039","Gödel, von Neumann and the P=?⁢N⁢PPnormal-?NPP=?NP problem.":"0671.68019","Une nouvelle approche du problème SAT. (A new approach to the SAT problem).":"0738.03006","Some consequences of non-uniform conditions on uniform classes.":"0541.68017"},"03C":{"Real number computations: On the use of information.":"0814.68059"},"05C":{"On the total dominating set problem.":"0645.05062","A best possible heuristic for the k-center problem.":"0565.90015"},"03F":{"On the computational complexity of best Chebyshev approximations.":"0617.03039"},"41A":{"On the computational complexity of best Chebyshev approximations.":"0617.03039"},"03B":{"Une nouvelle approche du problème SAT. (A new approach to the SAT problem).":"0738.03006"},"15A":{"On the joint spectral radius of matrices of order 2 with equal spectral radius.":"1197.15007"},"65K":{"A best possible heuristic for the k-center problem.":"0565.90015"},"65F":{"Linear interval equations: Computing enclosures with bounded relative overestimation is NP-hard.":"0841.65027"},"65G":{"Linear interval equations: Computing enclosures with bounded relative overestimation is NP-hard.":"0841.65027"},"65Y":{"Linear interval equations: Computing enclosures with bounded relative overestimation is NP-hard.":"0841.65027"},"68R":{"Approximating the minimum maximal independence number.":"0778.68041"}} '
 
 var geojson;
 
@@ -113,11 +114,15 @@ function initmap() {
 	});
 
 	L.drawLocal.draw.toolbar.buttons.circle = 'Select markers to filter.';
+	// L.drawLocal.edit.toolbar.buttons.remove = 'Remove specific shapes'
 
 	L.drawLocal.draw.handlers.circle.tooltip.start += "<br> Select the markers you want to keep.";
 	// map.addControl(drawControl);
 
 	map.on('draw:created', function (e) {
+		
+		$(".leaflet-draw-toolbar-top").popover('destroy');
+		
 		var type = e.layerType,
 			layer = e.layer;
 
@@ -140,6 +145,13 @@ function initmap() {
 
 		if (markers.length) {
 			filterMarkers(false)
+		}
+	})
+
+	map.on('draw:deletestop', function(e) {
+		if (!drawnItems.getLayers().length) {
+
+			$('.confirm').parent().addClass('leaflet-disabled')
 		}
 	})
 
@@ -195,7 +207,7 @@ function initmap() {
 
 	//gradient button
 	gradientBtn = L.functionButtons([{ content: '<div class="timeline map-button not-selected text-button"><span class="glyphicon glyphicon-arrow-right">Class timeline</span></div>' , position: 'bottomleft', title: 'Gradient'}]);
-	gradientBtn.on('clicked', gradient);
+	gradientBtn.on('clicked', lastgradient);
 	map.addControl(gradientBtn);
 
 
@@ -986,6 +998,7 @@ function rebuildMarkerLayer() {
 var b
 // Given articles put them in the map in respective mscs.
 function displayArticles(allClasses, markers, z) {
+	console.log(markers)
 
 	z = map.getZoom()
 	cs = ""
@@ -1068,6 +1081,8 @@ function search(event) {
 	if (filterBtn._map) {
 		filterBtn.removeFrom(map)
 	}
+	
+	drawnItems.clearLayers()
 
 	var term = $('.msc-search').val();
 	if (!term) {
@@ -1309,6 +1324,12 @@ function mathsearch(formula, text) {
 
 	markers = []
 	map.spin(true);
+
+	// displayArticles(JSON.parse(allClasses_backup), markers);
+	// rebuildMarkerLayer()
+
+	// map.spin(false)
+
 	convert(formula, text);
 }
 
